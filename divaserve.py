@@ -2,8 +2,6 @@ import os
 import math
 from vipsCC import VImage
 
-import pdb
-
 class DivaServe(object):
     def __init__(self, directory, **kwargs):
         """ <directory> is the directory of images to serve 
