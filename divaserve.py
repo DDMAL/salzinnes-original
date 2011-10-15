@@ -52,8 +52,6 @@ class DivaServe(object):
                         'fn': f
                     }
 
-                    print "{0}: stats: {1}".format(f, self.images[i])
-
                     self.images['lmx'] = lowest_max_zoom
                     i += 1
         else:
