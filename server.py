@@ -9,7 +9,11 @@ import os
 import solr
 from operator import itemgetter
 
-solr_h = solr.SolrConnection('http://localhost:8983/solr')
+import divaserve
+import conf
+
+solr_h = solr.SolrConnection(conf.SOLR_URL)
+diva_s = divaserve.DivaServe(conf.IMAGE_DIRECTORY)
 
 class SearchHandler(tornado.web.RequestHandler):
     def get(self):
@@ -55,6 +59,13 @@ class RootHandler(tornado.web.RequestHandler):
     def get(self):
         self.render("templates/index.html")
 
+class DivaHandler(tornado.web.RequestHandler):
+    def get(self):
+        z = self.get_argument("z")
+        info = diva_s.get(int(z))
+        self.set_header("Content-Type", "application/json")
+        self.write(json.dumps(info))
+
 settings = {
     "static_path": os.path.join(os.path.dirname(__file__), "static"),
     "debug": True,
@@ -63,6 +74,7 @@ settings = {
 
 application = tornado.web.Application([
     (r"/", RootHandler),
+    (r"/divaserve", DivaHandler),
     (r"/search", SearchHandler),
     (r"/page/(.*)", PageHandler),
     ], **settings)

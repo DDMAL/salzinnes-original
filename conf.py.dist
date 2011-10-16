@@ -1,0 +1,5 @@
+# A solr url
+SOLR_URL = "http://localhost:8983/solr"
+# Absolute path to the directory where the images are
+IMAGE_DIRECTORY = ""
+
