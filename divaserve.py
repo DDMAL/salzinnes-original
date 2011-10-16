@@ -1,4 +1,5 @@
 import os
+import glob
 import math
 from vipsCC import VImage
 
@@ -30,30 +31,26 @@ class DivaServe(object):
 
         if not self.images.keys():
             i = 0
-            for dp, dn, fns in os.walk(self.imgdir):
-                for f in fns:
-                    if f.startswith("."):
-                        continue
-                    if os.path.splitext(f)[-1] != '.tif':
-                        continue
-                    img = VImage.VImage(os.path.join(dp, f))
-                    img_wid = img.Xsize()
-                    img_hei = img.Ysize()
-                    del img
 
-                    max_zoom = self._get_max_zoom_level(img_wid, img_hei, til_wid, til_hei)
-                    if max_zoom > lowest_max_zoom:
-                        lowest_max_zoom = max_zoom
-                    
-                    self.images[i] = {
-                        'mx_w': img_wid,
-                        'mx_h': img_hei,
-                        'mx_z': max_zoom,
-                        'fn': f
-                    }
+            for f in glob.glob(os.path.join(self.imgdir, "*.tif")):
+                img = VImage.VImage(f)
+                img_wid = img.Xsize()
+                img_hei = img.Ysize()
+                del img
 
-                    self.images['lmx'] = lowest_max_zoom
-                    i += 1
+                max_zoom = self._get_max_zoom_level(img_wid, img_hei, til_wid, til_hei)
+                if max_zoom > lowest_max_zoom:
+                    lowest_max_zoom = max_zoom
+                
+                self.images[i] = {
+                    'mx_w': img_wid,
+                    'mx_h': img_hei,
+                    'mx_z': max_zoom,
+                    'fn': f
+                }
+
+                self.images['lmx'] = lowest_max_zoom
+                i += 1
         else:
             lowest_max_zoom = self.images['lmx']
 
