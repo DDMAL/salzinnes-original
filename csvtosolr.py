@@ -38,8 +38,7 @@ def main():
         doc["source_s"] = "salzinnes"
         doc["id"] = "%04d" % id
         id += 1
-        print doc
-#        solr_h.add(doc, commit=False)
+        solr_h.add(doc, commit=False)
 
     for c in cantus:
         try:
@@ -50,8 +49,8 @@ def main():
         doc["source_s"] = "cantus"
         doc["id"] = "%04d" % id
         id += 1
-#        solr_h.add(doc, commit = False)
-#    solr_h.commit()
+        solr_h.add(doc, commit = False)
+    solr_h.commit()
 
 if __name__ == "__main__":
     if len(sys.argv) < 3:
