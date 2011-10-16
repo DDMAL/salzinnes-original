@@ -26,7 +26,7 @@ class DivaServe(object):
         lowest_max_zoom = 0;
         pgs = []
 
-        if zoom in self.data.keys():
+        if zoom in self.data.keys() and len(self.data[zoom]) > 0:
             return self.data[zoom]
 
         if not self.images.keys():
@@ -92,28 +92,32 @@ class DivaServe(object):
             t_wid += w
             t_hei += h
             num_pages += 1
-        
-        a_wid = t_wid / float(num_pages)
-        a_hei = t_hei / float(num_pages)
 
-        dims = {
-            'a_wid': a_wid,
-            'a_hei': a_hei,
-            'max_w': mx_w,
-            'max_h': mx_h,
-            'max_ratio': max_ratio,
-            't_hei': t_hei,
-            't_wid': t_wid
-        }
+        if num_pages > 0:
+            a_wid = t_wid / float(num_pages)
+            a_hei = t_hei / float(num_pages)
 
-        title = os.path.basename(self.imgdir).replace('-', ' ').title()
+            dims = {
+                'a_wid': a_wid,
+                'a_hei': a_hei,
+                'max_w': mx_w,
+                'max_h': mx_h,
+                'max_ratio': max_ratio,
+                't_hei': t_hei,
+                't_wid': t_wid
+            }
 
-        self.data[zoom] = {
-            'item_title': title,
-            'dims': dims,
-            'max_zoom': lowest_max_zoom,
-            'pgs': pgs
-        }
+            title = os.path.basename(self.imgdir).replace('-', ' ').title()
+
+            self.data[zoom] = {
+                'item_title': title,
+                'dims': dims,
+                'max_zoom': lowest_max_zoom,
+                'pgs': pgs
+            }
+        else:
+            self.data[zoom] = {}
+
         return self.data[zoom]
 
     def _get_max_zoom_level(self, iwid, ihei, twid, thei):
