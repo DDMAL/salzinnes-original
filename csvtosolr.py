@@ -4,7 +4,9 @@ import sys
 import solr
 import csv
 
-solr_h = solr.Solr('http://localhost:8983/solr')
+import conf
+
+solr_h = solr.SolrConnection(conf.SOLR_URL)
 
 def main():
     cantusIds = []
