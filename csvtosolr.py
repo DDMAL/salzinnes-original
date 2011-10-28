@@ -34,13 +34,14 @@ def main():
     print "cantus",len(cantus)
 
     id = 1
+    all_docs = []
     for s in salzinnes:
         s = [unicode(t.strip(), encoding="UTF-8") for t in s]
         doc = dict(zip(salzhead, s))
         doc["source_s"] = "salzinnes"
         doc["id"] = "%04d" % id
         id += 1
-        solr_h.add(doc, commit=False)
+        all_docs.append(doc)
 
     for c in cantus:
         try:
@@ -51,7 +52,9 @@ def main():
         doc["source_s"] = "cantus"
         doc["id"] = "%04d" % id
         id += 1
-        solr_h.add(doc, commit = False)
+        all_docs.append(doc)
+
+    solr_h.add_many(all_docs)
     solr_h.commit()
 
 if __name__ == "__main__":
