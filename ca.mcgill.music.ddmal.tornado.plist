@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>KeepAlive</key>
+  <true/>
+  <key>Label</key>
+  <string>ca.mcgill.music.ddmal.solr.plist</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>python</string>
+    <string>server.py</string>
+  </array>
+  <key>RunAtLoad</key>
+  <true/>
+  <key>UserName</key>
+  <string>root</string>
+  <key>WorkingDirectory</key>
+  <string>/Users/alastairlocal/code/salzinnes</string>
+</dict>
+</plist>
