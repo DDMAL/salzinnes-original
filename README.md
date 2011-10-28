@@ -31,3 +31,21 @@ Test:
 
 * http://localhost:8080/page/048r
 * http://localhost:8080/search?q=adorare
+
+
+Installation
+apt-get install solr-jetty supervisor python-vipscc openjdk-6-jdk python-pip
+pip install tornado
+
+or on newer ubuntu, apt-get install python-tornado
+
+
+Setting up startup scripts on mac:
+
+mkdir -p ~/Library/LaunchAgents
+cp ca.mcgill.music.ddmal.solr.plist ~/Library/LaunchAgents/
+launchctl load -w ~/Library/LaunchAgents/ca.mcgill.music.ddmal.solr.plist
+
+To stop loading:
+launchctl unload -w ~/Library/LaunchAgents/ca.mcgill.music.ddmal.solr.plist
+
