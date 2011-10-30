@@ -39,7 +39,7 @@ class DivaServe(object):
                 'mx_w': img_wid,
                 'mx_h': img_hei,
                 'mx_z': max_zoom,
-                'fn': os.path.join(self.imgdir, f)
+                'fn': f
             }
 
         self.lowest_max_zoom = lmz
