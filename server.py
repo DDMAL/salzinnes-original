@@ -75,7 +75,7 @@ settings = {
 
 application = tornado.web.Application([
     (r"/", RootHandler),
-    (r"/divaserve", DivaHandler),
+    (r"/divaserve/?", DivaHandler),
     (r"/search", SearchHandler),
     (r"/page/(.*)", PageHandler),
     ], **settings)
