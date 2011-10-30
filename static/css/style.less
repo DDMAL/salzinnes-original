@@ -1,0 +1,220 @@
+@import "preboot.less";
+
+/* lol */
+* {
+    margin: 0;
+    padding: 0;
+}
+
+#diva-wrapper {
+    width: 100%;
+    height: 100%;
+    margin: 0 auto;
+    background-color: @darkGrey;
+}
+
+#diva-toolbar {
+    width: 100%;
+    height: 80px;
+    background-color: #FFF;
+    #gradient > .vertical(#EEE, #C0C0C0);
+    .pretty-text;
+}
+
+.pretty-text(@font-size: 12px) {
+    color: @darkGrey;
+    text-shadow: 0 1px 0 @offWhite;
+    font-size: @font-size;
+}
+
+body {
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    overflow: hidden;
+    max-height: 100%;
+    .pretty-text;
+}
+
+#right-side {
+    float: right;
+    position: relative;
+    left: -20px;
+    padding-top: 5px;
+}
+
+#left-side {
+    padding-top: 5px;
+    padding-left: 10px;
+}
+
+input {
+    outline: none;
+}
+
+input:focus {
+    border: 1px solid @lightGrey !important;
+}
+
+#title {
+    .pretty-text(15px);
+    text-align: center;
+    width: 100%;
+    height: 20px;
+    padding-top: 7px;
+    #info-icon {
+        width: 17px;
+        vertical-align: bottom;
+        height: 17px;
+        background-image: url('../img/info.png');
+        display: inline-block;
+    }
+}
+
+.button {
+    display: inline-block;
+    width: 33px;
+    height: 100%;
+    text-align: center;
+    div {
+        margin-bottom: 2px;
+        height: 25px;
+        width: 100%;
+    }
+}
+
+#link-icon {
+    background-image: url('../img/link.png');
+}
+
+.double-button {
+    .button;
+    width: 100px;
+    div[id$='icon'] {
+        display: inline-block;
+        height: 25px;
+        width: 42px;
+    }
+}
+
+.large-button {
+    .button;
+    width: 150px;
+}
+
+.large-button #slider div {
+    height: 1px !important;
+    outline: none !important;
+    width: 100px;
+    background: @mediumGrey !important;
+    position: relative;
+    top: 12px;
+    a {
+        margin-top: -3px;
+    }
+}
+
+.medium-button {
+    .button;
+    width: 80px;
+}
+
+#grid-icon {
+    background-image: url('../img/grid.png');
+}
+#document-icon {
+    background-image: url('../img/document.png');
+}
+#previous-icon {
+    background-image: url('../img/previous.png');
+}
+#next-icon {
+    background-image: url('../img/next.png');
+}
+
+#back-forward-icons {
+    display: inline-block;
+    position: relative;
+    top: 6px;
+    left: 10px;
+    div {
+        display: inline-block;
+        height: 25px;
+        width: 25px;
+    }
+    div:active {
+        background-position: 0px 25px;
+    }
+}
+
+#back-icon {
+    background-image: url('../img/back.png');
+}
+
+#forward-icon {
+    background-image: url('../img/forward.png');
+}
+
+#goto-page {
+    input {
+        .border-radius(4px);
+        border: 1px solid @mediumGrey;
+        width: 40px;
+        height: 25px;
+        font-size: 14px;
+        padding-left: 3px;
+        color: @darkGrey;
+    }
+}
+#link-icon:active, #grid-icon:active, #document-icon:active, #previous-icon:active, #next-icon:active {
+    background-position: 0px 25px;
+}
+#info-icon:active {
+    background-position: 0px 17px;
+}
+
+#three-panes {
+    width: 100%;
+    #left-pane {
+        display: inline-block;
+        height: 100%;
+        background-color: @offWhite;
+        #search-box {
+            #gradient > .vertical(@offWhite, @offWhite - #111);
+            width: 100%;
+            height: 40px;
+            input {
+                background-image: url('../img/search.png');
+                background-repeat: no-repeat;
+                background-position: left center;
+                padding-left: 18px;
+            }
+        }
+        width: 225px;
+    }
+    #middle-pane {
+        display: inline-block;
+        height: 100%;
+        width: 100%;
+        position: fixed;
+    }
+    #right-pane {
+        background-color: @offWhite;
+        display: inline-block;
+        position: absolute;
+        right: 0px;
+        height: 100%;
+        width: 180px;
+        padding: 10px;
+    }
+}
+
+#search-box input {
+    margin-top: 5px;
+    height: 30px;
+    .border-radius(10px);
+    border: 1px solid @mediumGrey;
+    width: 150px;
+    margin-left: 5px;
+    color: @mediumGrey;
+    padding-left: 3px;
+    font-size: 14px;
+}
