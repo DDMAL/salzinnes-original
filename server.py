@@ -31,6 +31,7 @@ class SearchHandler(tornado.web.RequestHandler):
             r3 = [r for r in r2]
             p["folio"] = r3[0]["folio_txt"][0]
             pages.append(p)
+        pages.sort(key=itemgetter("folio"))
         self.set_header("Content-Type", "application/json")
         self.write(json.dumps(pages))
        
