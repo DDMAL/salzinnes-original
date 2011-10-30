@@ -43,7 +43,7 @@ def get_full_text(cao, incipit, siglum, location):
         cols = row.findChildren()
         this_incipit = cols[4].text
         this_siglum = cols[5].text
-        if this_incipit==incipit and this_siglum==siglum:
+        if this_incipit==incipit.strip() and this_siglum==siglum:
             rel = row.find('a')['href']
             if rel:
                 link = '%s%s' % ("http://bach.music.uwo.ca/cantus/", rel)
