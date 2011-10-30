@@ -2,6 +2,7 @@
 
 import sys
 import csv
+import time
 import requests
 
 from BeautifulSoup import BeautifulSoup
@@ -65,20 +66,29 @@ def get_full_text(cao, incipit, siglum, location):
     return ('', '')
                 
 def main():
+    # Get file path of output for error log
+    filepath = sys.argv[2].split('/')
+    filepath = '/'.join(filepath[:-1]) + '/salzscrape_error_log.txt'
+    errorlog = open(filepath, 'wb')
     salzreader = csv.reader(open(sys.argv[1], 'rU'))
     salzwriter = csv.writer(open(sys.argv[2], 'wb'), quoting=csv.QUOTE_ALL)
     salzwriter.writerow(salzreader.next()+['FullManuscriptText', 'FullStandardText'])
-    for l in salzreader:
+    for (i, l) in enumerate(salzreader):
         cao = l[9]
         incipit = l[7] 
         siglum = l[15]
         location = '%s %s' % (l[1], l[2])
         full_manuscript_text, full_standard_text = get_full_text(cao, incipit, siglum, location)
         if not full_manuscript_text:
-            print "Could not retrieve full manuscript text from cao %s." % cao
+            errorlog.write('Could not retrieve full manuscript text from cao %s.\n' % cao)
         if not full_standard_text:
-            print "Could not retrieve full standard text from cao %s." % cao
+            errorlog.write('Could not retrieve full standard text from cao %s.\n' % cao)
         salzwriter.writerow(l+[full_manuscript_text, full_standard_text])
+        
+        # Print progress
+        if i%10==0:
+            now = time.localtime()
+            print '%s completed at time %s:%s:%s' % (i, now.tm_hour, now.tm_min, now.tm_sec)
 
 if __name__=='__main__':
     if len(sys.argv) < 3:
