@@ -31,10 +31,10 @@ def get_full_text(cao, incipit, siglum, location):
     r = requests.post(url, data=data)
     
     # Parse request content
-    soup = BeautifulSoup(r.content)
     try:
+        soup = BeautifulSoup(r.content)
         table = soup.findAll('table')[0]
-    except IndexError:
+    except AttributeError, IndexError:
         return ('', '')
     
     # Find links to correct chant according to incipit and siglum
