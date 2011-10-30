@@ -17,7 +17,11 @@ def get_full_text(cao, incipit, siglum, location):
     Gets full text of a chant from http://bach.music.uwo.ca/cantus/ given its 
         CAO number, incipit, siglum, and location.
     """
-
+    
+    # Check that cao is not an empty string
+    if not cao:
+        return ('', '')
+        
     # Get search results for cao
     url = 'http://bach.music.uwo.ca/cantus/search.asp'
     data = {
@@ -34,7 +38,7 @@ def get_full_text(cao, incipit, siglum, location):
     try:
         soup = BeautifulSoup(r.content)
         table = soup.findAll('table')[0]
-    except AttributeError, IndexError:
+    except (AttributeError, IndexError):
         return ('', '')
     
     # Find links to correct chant according to incipit and siglum
@@ -73,6 +77,7 @@ def main():
     salzreader = csv.reader(open(sys.argv[1], 'rU'))
     salzwriter = csv.writer(open(sys.argv[2], 'wb'), quoting=csv.QUOTE_ALL)
     salzwriter.writerow(salzreader.next()+['FullManuscriptText', 'FullStandardText'])
+    
     for (i, l) in enumerate(salzreader):
         cao = l[9]
         incipit = l[7] 
