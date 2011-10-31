@@ -18,12 +18,16 @@ diva_s = divaserve.DivaServe(conf.IMAGE_DIRECTORY)
 class SearchHandler(tornado.web.RequestHandler):
     def get(self):
         q = self.get_argument("q")
-        response = solr_h.query("fullmanuscripttext_t:%s AND fullstandardtext_t:%s" % (q, q), score=False)
+        response = solr_h.query("fullmanuscripttext_t:%s OR fullstandardtext_t:%s" % (q, q), score=False, highlight="*")
         pages = []
         for d in response:
             p = {}
             for k,v in d.iteritems():
                 p[k.replace("_t", "")] = v
+            hl=response.highlighting[p["id"]]
+            p["hl"]={}
+            for k,v in hl.iteritems():
+                p["hl"][k.replace("_t", "")] = v
             pages.append(p)
         pages.sort(key=itemgetter("folio"))
         self.set_header("Content-Type", "application/json")
