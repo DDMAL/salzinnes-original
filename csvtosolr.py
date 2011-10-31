@@ -21,7 +21,6 @@ def main():
     for s in salzinnes:
         s = [unicode(t.strip(), encoding="UTF-8") for t in s]
         doc = dict(zip(salzhead, s))
-        doc["source_s"] = "salzinnes"
         doc["id"] = "%04d" % id
         id += 1
         all_docs.append(doc)
