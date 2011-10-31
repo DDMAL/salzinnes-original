@@ -18,39 +18,25 @@ diva_s = divaserve.DivaServe(conf.IMAGE_DIRECTORY)
 class SearchHandler(tornado.web.RequestHandler):
     def get(self):
         q = self.get_argument("q")
-        response = solr_h.query("source_s:cantus AND fulltext_txt:%s" % q, score=False)
+        response = solr_h.query("fullmanuscripttext_t:%s AND fullstandardtext_t:%s" % (q, q), score=False)
         pages = []
         for d in response:
             p = {}
             for k,v in d.iteritems():
-                if isinstance(v, list):
-                    v = v[0]
-                p[k.replace("_txt", "")] = v
-            id = p["cantusidnumber"]
-            r2 = solr_h.query("source_s:salzinnes AND cantusidnumber_txt:%s" % id, score=False)
-            r3 = [r for r in r2]
-            p["folio"] = r3[0]["folio_txt"][0]
+                p[k.replace("_t", "")] = v
             pages.append(p)
         pages.sort(key=itemgetter("folio"))
         self.set_header("Content-Type", "application/json")
-        self.write(json.dumps(pages))
-       
+        self.write(json.dumps(pages))       
 
 class PageHandler(tornado.web.RequestHandler):
     def get(self, pgno):
-        response = solr_h.query("source_s:salzinnes AND folio_txt:%s" % pgno, score=False)
+        response = solr_h.query("folio_t:%s" % pgno, score=False)
         pages = []
         for d in response:
             p = {}
             for k,v in d.iteritems():
-                if isinstance(v, list):
-                    v = v[0]
-                p[k.replace("_txt", "")] = v
-            id = p["cantusidnumber"]
-            r2 = solr_h.query("source_s:cantus AND cantusidnumber_txt:%s" % id, score=False)
-            r3 = [r for r in r2]
-            p["fulltext"] = r3[0]["fulltext_txt"][0]
-
+                p[k.replace("_t", "")] = v
             pages.append(p)
         pages.sort(key=itemgetter("sequence"))
         self.set_header("Content-Type", "application/json")
