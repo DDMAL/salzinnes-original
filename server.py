@@ -35,12 +35,21 @@ class SearchHandler(tornado.web.RequestHandler):
 
 class PageHandler(tornado.web.RequestHandler):
     def get(self, pgno):
-        response = solr_h.query("folio_t:%s" % pgno, score=False)
+        q = self.get_argument("q", None)
+        if q:
+            query = "folio_t:%s OR (folio_t:%s AND (fullmanuscripttext_t:%s OR fullstandardtext_t:%s))" % (pgno, pgno, q, q)
+        else:
+            query = "folio_t:%s" % pgno
+        response = solr_h.query(query, score=False, highlight="*")
         pages = []
         for d in response:
             p = {}
             for k,v in d.iteritems():
                 p[k.replace("_t", "")] = v
+            hl=response.highlighting.get(p["id"], {})
+            p["hl"]={}
+            for k,v in hl.iteritems():
+                p["hl"][k.replace("_t", "")] = v
             pages.append(p)
         pages.sort(key=itemgetter("sequence"))
         self.set_header("Content-Type", "application/json")
