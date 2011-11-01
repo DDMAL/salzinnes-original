@@ -1,7 +1,24 @@
 import os
 import sys
 import math
-from vipsCC import VImage
+try:
+    from vipsCC import VImage
+    def image_size(fn):
+        img = VImage.VImage(fn)
+        size = (img.Xsize(), img.Ysize())
+        del img
+        return size
+except ImportError:
+    try:
+        from PIL import Image
+    except ImportError:
+        import Image
+    def image_size(fn):
+        print fn
+        img = Image.open(fn)
+        size = img.size
+        del img
+        return size
 from operator import itemgetter
 
 class DivaServe(object):
@@ -26,10 +43,7 @@ class DivaServe(object):
         for i,f in enumerate(os.listdir(self.imgdir)):
             if os.path.splitext(f)[1] not in (".tif", ".tiff"):
                 continue
-            img = VImage.VImage(os.path.join(self.imgdir, f))
-            img_wid = img.Xsize()
-            img_hei = img.Ysize()
-            del img
+            img_wid, img_hei = image_size(os.path.join(self.imgdir, f))
 
             max_zoom = self._get_max_zoom_level(img_wid, img_hei, self.til_wid, self.til_hei)
             if max_zoom > lmz:
