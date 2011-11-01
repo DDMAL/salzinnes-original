@@ -15,6 +15,11 @@ import conf
 solr_h = solr.SolrConnection(conf.SOLR_URL)
 diva_s = divaserve.DivaServe(conf.IMAGE_DIRECTORY)
 
+# If we wanted to sort by score, we could try a query like this (boosts results where
+#  the word only occurs in 1 of the texts)
+# (fullmanuscripttext_t:accipe AND fullstandardtext_t:accipe) OR
+#  (-fullmanuscripttext_t:accipe AND fullstandardtext_t:accipe^2) OR
+#  (fullmanuscripttext_t:accipe^2 AND -fullstandardtext_t:accipe)
 class SearchHandler(tornado.web.RequestHandler):
     def get(self):
         q = self.get_argument("q")
