@@ -29,7 +29,7 @@ class SearchHandler(tornado.web.RequestHandler):
             for k,v in hl.iteritems():
                 p["hl"][k.replace("_t", "")] = v
             pages.append(p)
-        pages.sort(key=itemgetter("folio"))
+        pages.sort(key=lambda d: (d["folio"], d["sequence"]))
         self.set_header("Content-Type", "application/json")
         self.write(json.dumps(pages))       
 
