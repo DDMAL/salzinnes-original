@@ -15,6 +15,11 @@ import conf
 solr_h = solr.SolrConnection(conf.SOLR_URL)
 diva_s = divaserve.DivaServe(conf.IMAGE_DIRECTORY)
 
+# If we wanted to sort by score, we could try a query like this (boosts results where
+#  the word only occurs in 1 of the texts)
+# (fullmanuscripttext_t:accipe AND fullstandardtext_t:accipe) OR
+#  (-fullmanuscripttext_t:accipe AND fullstandardtext_t:accipe^2) OR
+#  (fullmanuscripttext_t:accipe^2 AND -fullstandardtext_t:accipe)
 class SearchHandler(tornado.web.RequestHandler):
     def get(self):
         q = self.get_argument("q")
@@ -29,18 +34,27 @@ class SearchHandler(tornado.web.RequestHandler):
             for k,v in hl.iteritems():
                 p["hl"][k.replace("_t", "")] = v
             pages.append(p)
-        pages.sort(key=itemgetter("folio"))
+        pages.sort(key=lambda d: (d["folio"], d["sequence"]))
         self.set_header("Content-Type", "application/json")
         self.write(json.dumps(pages))       
 
 class PageHandler(tornado.web.RequestHandler):
     def get(self, pgno):
-        response = solr_h.query("folio_t:%s" % pgno, score=False)
+        q = self.get_argument("q", None)
+        if q:
+            query = "folio_t:%s OR (folio_t:%s AND (fullmanuscripttext_t:%s OR fullstandardtext_t:%s))" % (pgno, pgno, q, q)
+        else:
+            query = "folio_t:%s" % pgno
+        response = solr_h.query(query, score=False, highlight="*")
         pages = []
         for d in response:
             p = {}
             for k,v in d.iteritems():
                 p[k.replace("_t", "")] = v
+            hl=response.highlighting.get(p["id"], {})
+            p["hl"]={}
+            for k,v in hl.iteritems():
+                p["hl"][k.replace("_t", "")] = v
             pages.append(p)
         pages.sort(key=itemgetter("sequence"))
         self.set_header("Content-Type", "application/json")
