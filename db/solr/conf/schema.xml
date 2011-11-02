@@ -307,10 +307,10 @@
    <dynamicField name="*_i"  type="int"    indexed="true"  stored="true"/>
    <dynamicField name="*_s"  type="string"  indexed="true"  stored="true"/>
    <dynamicField name="*_l"  type="long"   indexed="true"  stored="true"/>
-   <dynamicField name="*_t"  type="text_general"    indexed="true"  stored="true"/>
-   <dynamicField name="*_txt" type="text_general"    indexed="true"  stored="true" multiValued="true"/>
+   <dynamicField name="*_t"  type="text_general" indexed="true" stored="true"/>
+   <dynamicField name="*_txt" type="text_general" indexed="true" stored="true" multiValued="true"/>
    <dynamicField name="*_strm" type="string" indexed="true" stored="true" multiValued="true"/>
-
+   <dynamicField name="*_stored" type="string" indexed="false" stored="true" />
  </fields>
 
  <!-- Field to use to determine and enforce document uniqueness. 
@@ -320,5 +320,7 @@
 
  <!-- SolrQueryParser configuration: defaultOperator="AND|OR" -->
  <solrQueryParser defaultOperator="OR"/>
+
+ <defaultSearchField>id</defaultSearchField>
 
 </schema>
