@@ -8,6 +8,7 @@ import csv
 import logging
 import cStringIO
 import codecs
+from collections import OrderedDict
 
 logging.basicConfig(filename='errors.log', format='%(asctime)-6s: %(name)s - %(levelname)s - %(message)s')
 lg = logging.getLogger('cantus')
@@ -99,6 +100,67 @@ class UnicodeWriter:
         for row in rows:
             self.writerow(row)
 
+genres = {"A":"Antiphon",
+    "AV": "Antiphon Verse",
+    "R": "Responsory",
+    "V": "Responsory Verse",
+    "W": "Versicle",
+    "H": "Hymn",
+    "I": "Invitatory antiphon",
+    "P": "Invitatory Psalm",
+    "M": "Miscellaneous",
+    "G": "Mass chants"
+}
+
+office = {
+    "V": "First Vespers",
+    "C": "Compline",
+    "M": "Matins",
+    "L": "Lauds",
+    "P": "Prime",
+    "T": "Terce",
+    "S": "Sext",
+    "N": "None",
+    "V2": "Second Vespers",
+    "D": "Day Hours",
+    "R": "Memorial",
+    "E": "Antiphons for the Magnificat or Benedictus",
+    "H": "Antiphons based on texts from the Historia",
+    "CA": "Chapter",
+    "X": "Supplementary"
+}
+
+concordances = OrderedDict([
+    ("C", u"F-Pn lat. 17436 (Paris-Bibliothèque nationale de France)"),
+    ("G", u"GB-DRc B. III. 11 (Durham: Cathedral Library)"),
+    ("B", u"D-BAs lit. 23 (Bamberg: Staatsbibliothek)"),
+    ("E", u"I-IV 106 (Ivrea: Biblioteca Capitolare)"),
+    ("M", u"I-MZ C. 12/75 (Monza: Basilica di S. Giovanni Battista-Biblioteca Capitolare e Tesoro)"),
+    ("V", u"I-VEcap XCVIII (Verona: Biblioteca Capitolare)"),
+    ("H", u"CH-SGs 390-391 (Sankt Gallen: Stiftsbibliothek)"),
+    ("R", u"CH-Zz Rh. 28 (Zürich: Zentralbibliothek)"),
+    ("D", u"F-Pn lat. 17296 (Paris: Bibliothèque nationale de France)"),
+    ("F", u"F-Pn lat. 12584 (Paris: Bibliothèque nationale de France)"),
+    ("S", u"GB-Lbl add. 30850 (London: The British Library)"),
+    ("L", u"I-BV V. 21 (Benevento: Biblioteca Capitolare)")
+])
+
+modes = OrderedDict([
+     ("1", "Mode 1"),
+     ("2", "Mode 2"),
+     ("3", "Mode 3"),
+     ("4", "Mode 4"),
+     ("5", "Mode 5"),
+     ("6", "Mode 6"),
+     ("7", "Mode 7"),
+     ("8", "Mode 8"),
+     ("*", "No music"),
+     ("r", "Responsory (Simple)"),
+     ("?", "Uncertain"),
+     ("S", "Responsory (Special)"),
+     ("T", "in Transposition")
+])
+
 if __name__ == "__main__":
     opts = OptionParser()
     (options, args) = opts.parse_args()
@@ -131,8 +193,8 @@ if __name__ == "__main__":
     lg.debug(feasts)
 
     csvoutfile = UnicodeWriter(open('salzinnes_concordance_expanded.csv', 'wb'))
-    k = None
 
+    k = None
     for record in csvfile:
 
         if not k:
@@ -150,65 +212,13 @@ if __name__ == "__main__":
 
         r = record["Concordances"]
         output_string = []
-        if "C" in r:
-            output_string.append(u"F-Pn lat. 17436 (Paris-Bibliothèque nationale de France)")
-        if "G" in r:
-            output_string.append(u"GB-DRc B. III. 11 (Durham: Cathedral Library)")
-        if "B" in r:
-            output_string.append(u"D-BAs lit. 23 (Bamberg: Staatsbibliothek)")
-        if "E" in r:
-            output_string.append(u"I-IV 106 (Ivrea: Biblioteca Capitolare)")
-        if "M" in r:
-            output_string.append(u"I-MZ C. 12/75 (Monza: Basilica di S. Giovanni Battista-Biblioteca Capitolare e Tesoro)")
-        if "V" in r:
-            output_string.append(u"I-VEcap XCVIII (Verona: Biblioteca Capitolare)")
-        if "H" in r:
-            output_string.append(u"CH-SGs 390-391 (Sankt Gallen: Stiftsbibliothek)")
-        if "R" in r:
-            output_string.append(u"CH-Zz Rh. 28 (Zürich: Zentralbibliothek)")
-        if "D" in r:
-            output_string.append(u"F-Pn lat. 17296 (Paris: Bibliothèque nationale de France)")
-        if "F" in r:
-            output_string.append(u"F-Pn lat. 12584 (Paris: Bibliothèque nationale de France)")
-        if "S" in r:
-            output_string.append(u"GB-Lbl add. 30850 (London: The British Library)")
-        if "L" in r:
-            output_string.append(u"I-BV V. 21 (Benevento: Biblioteca Capitolare)")
-        
+        for code,expanded in concordances.iteritems():
+            if code in r:
+                output_string.append(expanded)
         record['Concordances'] = ", ".join(output_string)
-
-        genres = {"A":"Antiphon",
-            "AV": "Antiphon Verse",
-            "R": "Responsory",
-            "V": "Responsory Verse",
-            "W": "Versicle",
-            "H": "Hymn",
-            "I": "Invitatory antiphon",
-            "P": "Invitatory Psalm",
-            "M": "Miscellaneous",
-            "G": "Mass chants"
-        }
 
         if record['Genre']:
             record['Genre'] = genres[record['Genre']]
-
-        office = {
-            "V": "First Vespers",
-            "C": "Compline",
-            "M": "Matins",
-            "L": "Lauds",
-            "P": "Prime",
-            "T": "Terce",
-            "S": "Sext",
-            "N": "None",
-            "V2": "Second Vespers",
-            "D": "Day Hours",
-            "R": "Memorial",
-            "E": "Antiphons for the Magnificat or Benedictus",
-            "H": "Antiphons based on texts from the Historia",
-            "CA": "Chapter",
-            "X": "Supplementary"
-        }
 
         if record['Office']:
             record["Office"] = office[record["Office"]]
@@ -255,60 +265,16 @@ if __name__ == "__main__":
                 elif pos[1] == "M":
                     record["Position"] = "{0} Antiphon for the Magnificat".format(ordinal(int(pos[0])))
 
-
-        # mode = {
-        #     "1": "First mode",
-        #     "2": "Second mode",
-        #     "3": "Third mode",
-        #     "4": "Fourth mode",
-        #     "5": "Fifth mode",
-        #     "6": "Sixth mode",
-        #     "7": "Seventh mode",
-        #     "8": "Eighth mode",
-        #     "*": "No music",
-        #     "r": "Responsory (Simple)",
-        #     "?": "Uncertain",
-        #     "S": "Responsory (Special)",
-        #     "T": "Chant in Transposition"
-        # }
-
         # record["Mode"] = mod[record["Mode"]]
         m = list(record["Mode"])
         mode_output = []
-        if "1" in m:
-            mode_output.append("Mode 1")
-        if "2" in m:
-            mode_output.append("Mode 2")
-        if "3" in m:
-            mode_output.append("Mode 3")
-        if "4" in m:
-            mode_output.append("Mode 4")
-        if "5" in m:
-            mode_output.append("Mode 5")
-        if "6" in m:
-            mode_output.append("Mode 6")
-        if "7" in m:
-            mode_output.append("Mode 7")
-        if "8" in m:
-            mode_output.append("Mode 8")
-        
-        if "*" in m:
-            mode_output.append("No music")
-        if "r" in m:
-            mode_output.append("Responsory (simple)")
-        if "?" in m:
-            mode_output.append("Uncertain")
-        if "S" in m:
-            mode_output.append("Responsory (special)")
-        if "T" in m:
-            mode_output.append("in Transposition")
-        
+        # Since this is an ordered dict, it'll do Mode 1 first and down the line
+        for mcode, expanded in modes.iteritems():
+            if mcode in m:
+                mode_output.append(expanded)
         if mode_output:
             outstring = " ".join(mode_output)
             record['Mode'] = outstring
-        
-
-
 
         recordout = [unicode(s) for s in record.values()]
 
