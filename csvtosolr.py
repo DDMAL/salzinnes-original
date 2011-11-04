@@ -11,8 +11,18 @@ solr_h = solr.SolrConnection(conf.SOLR_URL)
 def main():
     salzinnes = []
     salzcsv = csv.reader(open(sys.argv[1], "rU"))
-    salzhead = salzcsv.next()
-    salzhead = [unicode("%s_t" % s.lower()) for s in salzhead]
+    head = salzcsv.next()
+    strm_fields = ["concordances", "office", "mode", "genre", "feastnameeng"]
+    stored_fields = ["position"]
+    salzhead = []
+    for h in head:
+        h = h.lower()
+        if h in strm_fields:
+            salzhead.append(unicode("%s_strm" % h))
+        elif h in stored_fields:
+            salzhead.append(unicode("%s_stored" % h))
+        else:
+            salzhead.append(unicode("%s_t" % h))
     for l in salzcsv:
         salzinnes.append(l)
 
@@ -21,6 +31,7 @@ def main():
     for s in salzinnes:
         s = [unicode(t.strip(), encoding="UTF-8") for t in s]
         doc = dict(zip(salzhead, s))
+
         doc["id"] = "%04d" % id
         id += 1
         all_docs.append(doc)

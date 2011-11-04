@@ -793,22 +793,26 @@
        <str name="rows">10</str>
        <str name="fl">*,score</str>
        <str name="mlt.qf">
-         text^0.5 features^1.0 name^1.2 sku^1.5 id^10.0 manu^1.1 cat^1.4
+         fullstandardtext_t^1.0 feastnameeng_strm^1.0 mode_strm^1.0 genre_strm^1.0
        </str>
-       <str name="mlt.fl">text,features,name,sku,id,manu,cat</str>
+       <str name="mlt.fl">fullstandardtext_t feastnameeng_strm mode_strm genre_strm</str>
        <int name="mlt.count">3</int>
 
        <str name="qf">
-          text^0.5 features^1.0 name^1.2 sku^1.5 id^10.0 manu^1.1 cat^1.4
+          fullstandardtext_t^1.0 feastnameeng_strm^1.0 mode_strm^1.0 genre_strm^1.0
        </str>
 
        <str name="facet">on</str>
-       <str name="facet.field">cat</str>
-       <str name="facet.field">manu_exact</str>
+       <str name="facet.field">concordances_strm</str>
+       <str name="facet.field">mode_strm</str>
+       <str name="facet.field">office_strm</str>
+       <str name="facet.field">genre_strm</str>
+       <str name="facet.field">feastnameeng_strm</str>
+<!--        <str name="facet.field">manu_exact</str>
        <str name="facet.query">ipod</str>
        <str name="facet.query">GB</str>
-       <str name="facet.mincount">1</str>
-       <str name="facet.pivot">cat,inStock</str>
+ -->       <str name="facet.mincount">1</str>
+<!--        <str name="facet.pivot">cat,inStock</str>
        <str name="facet.range.other">after</str>
        <str name="facet.range">price</str>
        <int name="f.price.facet.range.start">0</int>
@@ -824,14 +828,14 @@
        <str name="f.manufacturedate_dt.facet.range.gap">+1YEAR</str>
        <str name="f.manufacturedate_dt.facet.range.other">before</str>
        <str name="f.manufacturedate_dt.facet.range.other">after</str>
-
+ -->
 
        <!-- Highlighting defaults -->
        <str name="hl">on</str>
-       <str name="hl.fl">text features name</str>
-       <str name="f.name.hl.fragsize">0</str>
+       <!-- <str name="hl.fl">text features name</str> -->
+<!--        <str name="f.name.hl.fragsize">0</str>
        <str name="f.name.hl.alternateField">name</str>
-     </lst>
+ -->     </lst>
      <arr name="last-components">
        <str>spellcheck</str>
      </arr>
@@ -1105,7 +1109,7 @@
       -->
     <lst name="spellchecker">
       <str name="name">default</str>
-      <str name="field">name</str>
+      <str name="field">fullstandardtext_t</str>
       <str name="spellcheckIndexDir">spellchecker</str>
       <!-- uncomment this to require terms to occur in 1% of the documents in order to be included in the dictionary
       	<float name="thresholdTokenFrequency">.01</float>
