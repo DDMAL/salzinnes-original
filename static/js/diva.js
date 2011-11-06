@@ -351,7 +351,7 @@ THE SOFTWARE.
                         toAppend += '<li><strong>' + li_item + ':</strong> ' + incipit_data[li_item] + '</li>';
                     }
                     if (incipit.concordances_strm[0]) {
-                        toAppend += '<li><p class="concordances">Concordances:</p><ul><li>' + incipit.concordances_strm[0].split(', ').join('</li>\n<li>') + '</li></ul></li>';
+                        toAppend += '<li><p class="concordances">Concordances:</p><ul><li>' + incipit.concordances_strm.join('</li>\n<li>') + '</li></ul></li>';
                     }
                     toAppend += '</ul>';
                 }
