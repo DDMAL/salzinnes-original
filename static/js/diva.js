@@ -334,7 +334,6 @@ THE SOFTWARE.
                     var incipit = data[i];
                     folio = incipit.folio;
                     var incipitName = incipit.incipit;
-                    console.log(incipit);
                     toAppend += '<h3 class="incipit">' + incipitName + '</h3>';
                     toAppend += '<ul class="incipit-info">';
                     incipit_data = {
@@ -1247,7 +1246,6 @@ THE SOFTWARE.
             $('#search-results div').removeClass('active');
             $(currentResult).addClass('active');
             var pageIndex = getPageIndex('1-' + $(currentResult).attr('data-folio') + '.tif');
-            console.log(pageIndex);
             gotoPage(pageIndex+1);
         };
 
@@ -1256,7 +1254,6 @@ THE SOFTWARE.
             // Handle the search form submission
             $('#search-box form').submit(function() {
                 var query = $('#search-box input').val();
-                console.log(query);
                 var ajaxURL = '/search?q=' + query;
                 $.getJSON(ajaxURL, function(data) {
                     var toAppend = '';
@@ -1273,7 +1270,6 @@ THE SOFTWARE.
                     });
                     $('#forward-icon').click(function() {
                         var currentlyActive = $('#search-results .active');
-                        console.log(currentlyActive);
                         if (currentlyActive.length) {
                             highlightNextResult($(currentlyActive[0]).next());
                         } else {
@@ -1762,7 +1758,6 @@ THE SOFTWARE.
                 settings.panelHeight = parseInt($(settings.elementSelector).height(), 10) + settings.scrollbarWidth - 80;
                 $(settings.outerSelector).width(settings.panelWidth + settings.scrollbarWidth);
                 $(settings.outerSelector).height(settings.panelHeight - settings.scrollbarWidth);
-                console.log(settings.panelHeight);
             }
             
             
