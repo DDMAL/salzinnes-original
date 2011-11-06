@@ -33,6 +33,7 @@ def main():
         doc = dict(zip(salzhead, s))
 
         doc["id"] = "%04d" % id
+        doc["concordances_strm"] = doc["concordances_strm"].split(", ")
         id += 1
         all_docs.append(doc)
 

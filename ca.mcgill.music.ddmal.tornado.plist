@@ -5,11 +5,12 @@
   <key>KeepAlive</key>
   <true/>
   <key>Label</key>
-  <string>ca.mcgill.music.ddmal.solr.plist</string>
+  <string>ca.mcgill.music.ddmal.tornado.plist</string>
   <key>ProgramArguments</key>
   <array>
     <string>python</string>
     <string>server.py</string>
+    <!-- <string>port if needed</string> -->
   </array>
   <key>RunAtLoad</key>
   <true/>
