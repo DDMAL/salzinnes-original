@@ -326,6 +326,43 @@ THE SOFTWARE.
         // Helper function for setCurrentPage; should only be called at the end
         var updateCurrentPage = function(pageIndex) {
             var pageNumber = pageIndex + 1;
+            var ajaxURL = '/page/' + settings.pages[pageIndex].fn.substring(2, 6);
+            var folio = 'N/A';
+            $.getJSON(ajaxURL, function(data) {
+                var toAppend = '';
+                for (var i = 0; i < data.length; i++) {
+                    var incipit = data[i];
+                    folio = incipit.folio;
+                    var incipitName = incipit.incipit;
+                    console.log(incipit);
+                    toAppend += '<h3 class="incipit">' + incipitName + '</h3>';
+                    toAppend += '<ul class="incipit-info">';
+                    incipit_data = {
+                        'Mode': incipit.mode_strm,
+                        'Office': incipit.office_strm,
+                        'Genre': incipit.genre_strm,
+                        'Liturgical position': incipit.position_stored,
+                        'Standard text': incipit.fullstandardtext,
+                        'Manuscript text': incipit.fullmanuscripttext,
+                        'Feastname': incipit.feastname + ' (<em>' + incipit.feastnameeng_strm + '</em>)',
+                        'CAO number': incipit.caonumber,
+                    }
+                    for (li_item in incipit_data) {
+                        toAppend += '<li><strong>' + li_item + ':</strong> ' + incipit_data[li_item] + '</li>';
+                    }
+                    if (incipit.concordances_strm[0]) {
+                        toAppend += '<li><p class="concordances">Concordances:</p><ul><li>' + incipit.concordances_strm[0].split(', ').join('</li>\n<li>') + '</li></ul></li>';
+                    }
+                    toAppend += '</ul>';
+                }
+                // Append at the end
+                $('#current-folio span').text(folio);
+                $('#page-data').html(toAppend);
+                $('.incipit, .concordances').click(function() {
+                    $(this).next().toggle();
+                    $(this).toggleClass('arrow2');
+                });
+            });
 
             $('#current-page span').text(pageNumber);
         };
@@ -611,6 +648,7 @@ THE SOFTWARE.
 
         // Helper function called by loadDocument to scroll to the desired place
         var documentScroll = function() {
+            updateCurrentPage(settings.currentPageIndex);
             if (goDirectlyTo()) {
                 return;
             }
@@ -1205,8 +1243,54 @@ THE SOFTWARE.
             }
         };
 
+        var highlightNextResult = function(currentResult) {
+            $('#search-results div').removeClass('active');
+            $(currentResult).addClass('active');
+            var pageIndex = getPageIndex('1-' + $(currentResult).attr('data-folio') + '.tif');
+            console.log(pageIndex);
+            gotoPage(pageIndex+1);
+        };
+
         // Handles all the events
         var handleEvents = function() {
+            // Handle the search form submission
+            $('#search-box form').submit(function() {
+                var query = $('#search-box input').val();
+                console.log(query);
+                var ajaxURL = '/search?q=' + query;
+                $.getJSON(ajaxURL, function(data) {
+                    var toAppend = '';
+                    for (var i = 0; i < data.length; i++) {
+                        var divClass = i % 2 + 1;
+                        var standardText = data[i].hl.fullstandardtext[0];
+                        var folio = data[i].folio;
+                        var backgroundImage = settings.iipServerBaseUrl + '1-' + folio + '.tif' + '&WID=35&CVT=JPG';
+                        toAppend += '<div style="background-image: url(' + backgroundImage + ');" data-folio="' + folio + '">' + standardText + '</div>';
+                    }
+                    $('#search-results').html(toAppend);
+                    $('#search-results div').click(function() {
+                        highlightNextResult(this);
+                    });
+                    $('#forward-icon').click(function() {
+                        var currentlyActive = $('#search-results .active');
+                        console.log(currentlyActive);
+                        if (currentlyActive.length) {
+                            highlightNextResult($(currentlyActive[0]).next());
+                        } else {
+                            highlightNextResult($('#search-results div')[0]);
+                        }
+                    });
+                    $('#back-icon').click(function() {
+                        var currentlyActive = $('#search-results .active');
+                        if (currentlyActive.length) {
+                            highlightNextResult($(currentlyActive[0]).prev());
+                        } else {
+                            highlightNextResult($('#search-results div')[0]);
+                        }
+                    });
+                });
+                return false;
+            });
             // Handle the grid toggle events
             if (settings.enableGrid) {
                 // silly
@@ -1379,7 +1463,8 @@ THE SOFTWARE.
                 clearTimeout(resizeTimer);
                 resizeTimer = setTimeout(function() {
                     settings.panelHeight = parseInt($(settings.elementSelector).height(), 10) - settings.scrollbarWidth - 80;
-                    settings.panelWidth = parseInt($(settings.elementSelector).width(), 10) - settings.scrollbarWidth - 425;
+                    // THE BELOW NEEDS TO BE FIXED
+                    settings.panelWidth = parseInt($(settings.elementSelector).width(), 10) - settings.scrollbarWidth - 570;
                     $(settings.outerSelector).height(settings.panelHeight + settings.scrollbarWidth);
                     $(settings.outerSelector).width(settings.panelWidth + settings.scrollbarWidth);
                     // Simulate scrolling down
@@ -1669,11 +1754,11 @@ THE SOFTWARE.
                 }
 
                 //$(settings.elementSelector).css('width', settings.panelWidth);
-                console.log(settings.elementSelector.width());
                 $(settings.outerSelector).css('height', settings.panelHeight + 'px');
             } else {
                 // For other devices, adjust to take the scrollbar into account
-                settings.panelWidth = parseInt($(settings.elementSelector).width(), 10) - 425 - settings.scrollbarWidth;
+                // STOP IT WITH THE MAGIC NUMBERS
+                settings.panelWidth = parseInt($(settings.elementSelector).width(), 10) - 570 - settings.scrollbarWidth;
                 settings.panelHeight = parseInt($(settings.elementSelector).height(), 10) + settings.scrollbarWidth - 80;
                 $(settings.outerSelector).width(settings.panelWidth + settings.scrollbarWidth);
                 $(settings.outerSelector).height(settings.panelHeight - settings.scrollbarWidth);
