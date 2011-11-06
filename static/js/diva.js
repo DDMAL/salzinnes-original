@@ -328,12 +328,17 @@ THE SOFTWARE.
             var pageNumber = pageIndex + 1;
             var ajaxURL = '/page/' + settings.pages[pageIndex].fn.substring(2, 6);
             var folio = 'N/A';
+            var feasts = [];
             $.getJSON(ajaxURL, function(data) {
                 var toAppend = '';
                 for (var i = 0; i < data.length; i++) {
                     var incipit = data[i];
                     folio = incipit.folio;
                     var incipitName = incipit.incipit;
+                    var feast = incipit.feastnameeng_strm[0];
+                    if (jQuery.inArray(feast, feasts) == -1) {
+                        feasts.push(feast);
+                    }
                     toAppend += '<h3 class="incipit">' + incipitName + '</h3>';
                     toAppend += '<ul class="incipit-info">';
                     incipit_data = {
@@ -355,6 +360,7 @@ THE SOFTWARE.
                     toAppend += '</ul>';
                 }
                 // Append at the end
+                $("#current-folio-feasts span").text(feasts.join("; "));
                 $('#current-folio span').text(folio);
                 $('#page-data').html(toAppend);
                 $('.incipit, .concordances').click(function() {
