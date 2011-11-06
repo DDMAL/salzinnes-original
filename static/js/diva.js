@@ -1262,7 +1262,7 @@ THE SOFTWARE.
                         var standardText = data[i].hl.fullstandardtext[0];
                         var folio = data[i].folio;
                         var backgroundImage = settings.iipServerBaseUrl + '1-' + folio + '.tif' + '&WID=35&CVT=JPG';
-                        toAppend += '<div style="background-image: url(' + backgroundImage + ');" data-folio="' + folio + '">' + standardText + '</div>';
+                        toAppend += '<div style="background-image: url(' + backgroundImage + ');" data-folio="' + folio + '">' + folio + ': ' + standardText + '</div>';
                     }
                     $('#search-results').html(toAppend);
                     $('#search-results div').click(function() {
