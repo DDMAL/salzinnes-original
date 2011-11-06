@@ -1,6 +1,6 @@
 <html>
 <head>
-    <title>Test</title>
+    <title>Salzinnes</title>
     <link rel="stylesheet/less" type="text/css" href="{{static_url("css/style.less")}}" />
     <link rel="stylesheet" href="{{static_url("css/diva.css")}}" type="text/css" />
     <link rel="stylesheet" href="{{static_url("css/jquery-ui.css")}}" type="text/css" />
@@ -19,6 +19,16 @@
                 iipServerBaseUrl: 'http://ddmal.music.mcgill.ca/fcgi-bin/iipsrv.fcgi?FIF=/mnt/images/salzinnes-original/',
                 backendServer: '/divaserve/?q=1'
             });
+            $("#infobox").dialog({
+                autoOpen: false,
+                title: 'Salzinnes manuscript viewer',
+                width: 600,
+                height: 400
+
+            });
+            $("#info-icon").click(function() {
+                $("#infobox").dialog('open');
+              });
         });
     </script>
 </head>
@@ -56,6 +66,22 @@
                 </div>
             </div>
         </div>
+    </div>
+    <div id="infobox" style="display:none;">
+      <h2>Salzinnes manuscript viewer</h2>
+      <p><b>Help:</b></p>
+      
+      <p>Search for any word on the the left-hand column<br>
+      Click a result to go to the page that the chant appears on.<br>
+      The right column shows the incipit of all chants on the currently visible page. Click an incipit to expand it and see additional information
+      about the chant.</p>
+
+      <p>This manuscript appears with kind permission from the Patrick Power Library, Saint Mary's University, Halifax. Digital Images: Courtesy of Judith Dietz</p>
+
+      <p>Chant data is provided by the CANTUS project</p>
+
+      <p>This viewer is developed by DDMAL as part of the SIMSSA project. Development is sponsored by the Social Sciences and Humanities Research Council of Canada.<br>
+      Powered by Diva.js</p>
     </div>
 </body>
 </html>
