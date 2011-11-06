@@ -51,6 +51,8 @@ class PageHandler(tornado.web.RequestHandler):
             p = {}
             for k,v in d.iteritems():
                 p[k.replace("_t", "")] = v
+                if k == "concordances_strm":
+                    p[k] = v[0].split(", ")
             hl=response.highlighting.get(p["id"], {})
             p["hl"]={}
             for k,v in hl.iteritems():
