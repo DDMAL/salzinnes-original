@@ -5,7 +5,9 @@ Requirements:
 
 * tornado
 * vips (http://www.vips.ecs.soton.ac.uk/index.php?title=VIPS)
-* fcgi server for vips (
+  * PIL will be used if vips can't be found
+* IIPImage (http://iipimage.sourceforge.net/)
+* fcgi server for IIP (nginx is good)
 * solr (included)
 * java
 
@@ -60,3 +62,9 @@ To stop loading:
 
     launchctl unload -w ~/Library/LaunchAgents/ca.mcgill.music.ddmal.solr.plist
 
+Other things on Mac:
+
+nginx brew install nginx. copy startup script
+IIP brew install spawn-fcgi, startup script
+Download & install IIP
+Copy nginx config
