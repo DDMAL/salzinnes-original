@@ -340,11 +340,11 @@ THE SOFTWARE.
                         'Mode': incipit.mode_strm,
                         'Office': incipit.office_strm,
                         'Genre': incipit.genre_strm,
-                        'Liturgical position': incipit.position_stored,
-                        'Standard text': incipit.fullstandardtext,
-                        'Manuscript text': incipit.fullmanuscripttext,
-                        'Feastname': incipit.feastname + ' (<em>' + incipit.feastnameeng_strm + '</em>)',
-                        'CAO number': incipit.caonumber,
+                        'Liturgical Position': incipit.position_stored,
+                        'Standard Text': incipit.fullstandardtext,
+                        'Manuscript Text': incipit.fullmanuscripttext,
+                        'Feast Name': incipit.feastname + ' (<em>' + incipit.feastnameeng_strm + '</em>)',
+                        'CAO Number': incipit.caonumber,
                     }
                     for (li_item in incipit_data) {
                         toAppend += '<li><strong>' + li_item + ':</strong> ' + incipit_data[li_item] + '</li>';
@@ -362,8 +362,6 @@ THE SOFTWARE.
                     $(this).toggleClass('arrow2');
                 });
             });
-
-            $('#current-page span').text(pageNumber);
         };
 
         // Determines and sets the "current page" (settings.currentPageIndex); called within adjustPages 
