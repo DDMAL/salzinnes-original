@@ -1291,6 +1291,10 @@ THE SOFTWARE.
                 return false;
             });
 
+            // Fix to allow scrolling of left pane
+            $('#search-outer').height(settings.panelHeight - $('#search-box').height());
+            $('#search-results').width($('#search-outer').width() - settings.scrollbarWidth);
+
             // Handler for the clear results button
             $('#clear-results').click(function() {
                 $(this).fadeOut(50);
@@ -1498,6 +1502,8 @@ THE SOFTWARE.
                     settings.panelWidth = parseInt($(settings.elementSelector).width(), 10) - settings.scrollbarWidth - 570;
                     $(settings.outerSelector).height(settings.panelHeight + settings.scrollbarWidth);
                     $(settings.outerSelector).width(settings.panelWidth + settings.scrollbarWidth);
+                    // Adjust the search panel width
+                    $('#search-outer').height(settings.panelHeight - $('#search-box').height());
                     // Simulate scrolling down
                     adjustPages(1);
                 }, 10);
