@@ -23,7 +23,7 @@ diva_s = divaserve.DivaServe(conf.IMAGE_DIRECTORY)
 class SearchHandler(tornado.web.RequestHandler):
     def get(self):
         q = self.get_argument("q")
-        response = solr_h.query("fullmanuscripttext_t:%s OR fullstandardtext_t:%s" % (q, q), score=False, highlight="*")
+        response = solr_h.query("fullmanuscripttext_t:*%s* OR fullstandardtext_t:*%s* OR feastname_t:*%s* OR feastnameeng_strm:*%s*" % (q, q, q, q), score=False, highlight="*")
         pages = []
         for d in response:
             p = {}

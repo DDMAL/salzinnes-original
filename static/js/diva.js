@@ -1263,7 +1263,18 @@ THE SOFTWARE.
                     var toAppend = '';
                     for (var i = 0; i < data.length; i++) {
                         var divClass = i % 2 + 1;
-                        var standardText = data[i].hl.fullstandardtext[0];
+                        var standardText = "";
+                        if ("feastname" in data[i].hl) {
+                            standardText = data[i].incipit + " (" + data[i].hl.feastname[0] + ")";
+                        } else if ("feastnameeng_strm" in data[i].hl) {
+                            standardText = data[i].incipit + " (" + data[i].hl.feastnameeng_strm[0] + ")";
+                        } else if ("fullstandardtext" in data[i].hl) {
+                            standardText = data[i].hl.fullstandardtext[0];
+                        } else if ("fullmanuscripttext" in data[i].hl) {
+                            standardText = data[i].hl.fullmanuscripttext[0];
+                        } else {
+                            standardText = data[i].incipit;
+                        }
                         var folio = data[i].folio;
                         var backgroundImage = settings.iipServerBaseUrl + '1-' + folio + '.tif' + '&WID=35&CVT=JPG';
                         toAppend += '<div style="background-image: url(' + backgroundImage + ');" data-folio="' + folio + '">' + folio + ': ' + standardText + '</div>';
