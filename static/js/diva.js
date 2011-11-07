@@ -343,7 +343,7 @@ THE SOFTWARE.
                     var incipitID = String(data[i].id);
                     folio = incipit.folio;
                     var incipitName = incipit.incipit;
-                    var feast = incipit.feastnameeng[0];
+                    var feast = incipit.feastnameeng;
                     if (jQuery.inArray(feast, feasts) == -1) {
                         feasts.push(feast);
                     }
