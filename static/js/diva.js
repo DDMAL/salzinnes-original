@@ -361,7 +361,7 @@ THE SOFTWARE.
                 }
                 // Append at the end
                 $("#current-folio-feasts span").text(feasts.join("; "));
-                $('#current-folio span').text(folio);
+                $('#current-folio span').text(folio.replace(/^0+/, ""));
                 $('#page-data').html(toAppend);
                 $('.incipit, .concordances').click(function() {
                     $(this).next().toggle();
