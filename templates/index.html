@@ -23,8 +23,13 @@
                 autoOpen: false,
                 title: 'Salzinnes manuscript viewer',
                 width: 600,
-                height: 400
-
+                height: 600,
+                modal: true,
+                draggable: false,
+                resizable: false,
+                buttons: [
+                 {text: "Close", click: function() { $(this).dialog("close"); } }
+                ]
             });
             $("#info-icon").click(function() {
                 $("#infobox").dialog('open');
@@ -71,17 +76,28 @@
       <h2>Salzinnes manuscript viewer</h2>
       <p><b>Help:</b></p>
       
-      <p>Search for any word on the the left-hand column<br>
-      Click a result to go to the page that the chant appears on.<br>
-      The right column shows the incipit of all chants on the currently visible page. Click an incipit to expand it and see additional information
+      <p style="margin-top:0.5em;">Use the left column to search through the manuscript. You can search for any chant text that appears in the manuscript.
+      You can also query by the name of the feast that the chant occurs in (in English or the Latin abbreviations).<br>
+      Click on a result to go to the page that the chant appears on.
+      The right column shows the incipit of all chants on the currently visible page. Click the text of an incipit to expand it and see additional information
       about the chant.</p>
 
-      <p>This manuscript appears with kind permission from the Patrick Power Library, Saint Mary's University, Halifax. Digital Images: Courtesy of Judith Dietz</p>
+      <p style="margin-top:1em;">This manuscript appears with kind permission from the <a href="http://www.smu.ca/administration/library/">Patrick Power Library</a>, 
+      Saint Mary's University, Halifax. Digital Images courtesy of Judith Dietz.</p>
 
-      <p>Chant data is provided by the CANTUS project</p>
+      <p style="margin-top:0.5em;">Chant data is provided by the <a href="http://cantusdatabase.org/">CANTUS project</a>.</p>
 
-      <p>This viewer is developed by DDMAL as part of the SIMSSA project. Development is sponsored by the Social Sciences and Humanities Research Council of Canada.<br>
-      Powered by Diva.js</p>
+      <p style="margin-top:0.5em;">This viewer was developed by <a href="http://ddmal.music.mcgill.ca/">DDMAL</a> as part of the
+      <a href="http://simssa.music.mcgill.ca/">SIMSSA</a> project. Development is sponsored by the Social Sciences and Humanities Research Council of Canada.
+      Powered by <a href="http://ddmal.music.mcgill.ca/diva">Diva.js</a>.</p>
+
+      <p style="margin-top:0.5em;">Analysis and development by Alastair Porter, Andrew Hankinson, Catherine Motuz, Remi Chiu, Saining Li, and Wendy Liu.</p>
+ 
+      <p style="margin-top:0.5em; width:100%; text-align:center;"><img src="{{static_url("img/cantus.gif")}}" width="400"><br>
+      <img style="margin-top:0.3em;" src="{{static_url("img/sshrc-logo.jpg")}}" width="400"><br>
+      <img style="margin-top:0.3em;" src="{{static_url("img/schulich-logo.png")}}" width="400"><br>
+      <img style="margin-top:0.3em;" src="{{static_url("img/cirmmt_logo.jpg")}}" width="400"><br>
+      <img style="margin-top:0.3em;" src="{{static_url("img/ddmal400.jpg")}}" width="400">
     </div>
 </body>
 </html>
