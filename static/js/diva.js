@@ -1679,22 +1679,9 @@ THE SOFTWARE.
 
                 // If the last character is an or a v, assume a folio number
                 if (lastChar == 'r' || lastChar == 'v') {
-                    // Check if it's in the appendix or not
-                    isAppendix = (input[0] == 'A') ? true : false;
-                    if (isAppendix) {
-                        input = input.substring(1);
-                        prefix = '2-';
-                    } else {
-                        prefix = '1-';
-                    }
-
-                    // Pad it with zeroes
-                    while (input.length < 4) {
-                        input = '0' + input;
-                    }
-                    desiredPage = getPageIndex(prefix + input + '.tif') + 1;
+                    desiredPage = getPageIndex(folioToTiff(input));
                 } else {
-                    desiredPage = parseInt($('#diva-goto-page input').val(), 10);
+                    desiredPage = parseInt(input, 10);
                 }
 
                 if (!gotoPage(desiredPage)) {
