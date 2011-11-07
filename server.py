@@ -23,6 +23,7 @@ diva_s = divaserve.DivaServe(conf.IMAGE_DIRECTORY)
 class SearchHandler(tornado.web.RequestHandler):
     def get(self):
         q = self.get_argument("q")
+        q = q.lower()
         qstr = "fullmanuscripttext_t:*%s* OR fullstandardtext_t:*%s* OR feastname_t:*%s* OR feastnameeng_t:*%s*" % (q, q, q, q)
 
         rows = self.get_argument("rows", "10")
