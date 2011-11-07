@@ -1,5 +1,9 @@
 @import "preboot.less";
 
+@viewerBg:      #EEE;
+@sideBg:        #E9F0F9;
+@lineColor:     #999;
+
 /* lol */
 * {
     margin: 0;
@@ -10,7 +14,7 @@
     width: 100%;
     height: 100%;
     margin: 0 auto;
-    background-color: @darkGrey;
+    background-color: @viewerBg;
 }
 
 #diva-toolbar {
@@ -19,6 +23,7 @@
     background-color: #FFF;
     #gradient > .vertical(#EEE, #C0C0C0);
     .pretty-text;
+    border-bottom: 1px solid @lineColor;
 }
 
 .pretty-text(@font-size: 12px) {
@@ -176,9 +181,10 @@ input:focus {
     #left-pane {
         display: inline-block;
         height: 100%;
-        background-color: @offWhite;
+        background-color: @sideBg;
         #search-box {
             #gradient > .vertical(@offWhite, @offWhite - #111);
+            border-bottom: 1px solid @lineColor;
             width: 100%;
             height: 40px;
             input {
@@ -189,6 +195,7 @@ input:focus {
             }
         }
         width: 275px;
+        border-right: 1px solid @lineColor;
     }
     #middle-pane {
         display: inline-block;
@@ -197,12 +204,13 @@ input:focus {
         position: fixed;
     }
     #right-pane {
-        background-color: @offWhite;
+        background-color: @sideBg;
         display: inline-block;
         position: fixed;
         right: 0px;
         height: 100%;
         width: 295px;
+        border-left: 1px solid @lineColor;
     }
 }
 
