@@ -12,7 +12,7 @@ def main():
     salzinnes = []
     salzcsv = csv.reader(open(sys.argv[1], "rU"))
     head = salzcsv.next()
-    strm_fields = ["concordances", "office", "mode", "genre", "feastnameeng"]
+    strm_fields = ["concordances", "office", "mode", "genre"]
     stored_fields = ["position"]
     salzhead = []
     for h in head:
