@@ -1671,17 +1671,26 @@ THE SOFTWARE.
             });
             
             $('#diva-goto-page').submit(function() {
-                var desiredPage, folioNumber, numChars;
+                var desiredPage, folioNumber, numChars, isAppendix, prefix;
                 var input = $('#diva-goto-page input').val();
                 var lastChar = input.charAt(input.length - 1);
 
                 // If the last character is an or a v, assume a folio number
                 if (lastChar == 'r' || lastChar == 'v') {
+                    // Check if it's in the appendix or not
+                    isAppendix = (input[0] == 'A') ? true : false;
+                    if (isAppendix) {
+                        input = input.substring(1);
+                        prefix = '2-';
+                    } else {
+                        prefix = '1-';
+                    }
+
                     // Pad it with zeroes
                     while (input.length < 4) {
                         input = '0' + input;
                     }
-                    desiredPage = getPageIndex('1-' + input + '.tif') + 1;
+                    desiredPage = getPageIndex(prefix + input + '.tif') + 1;
                 } else {
                     desiredPage = parseInt($('#diva-goto-page input').val(), 10);
                 }
