@@ -3,3 +3,6 @@ SOLR_URL = "http://localhost:8983/solr"
 # Absolute path to the directory where the images are
 IMAGE_DIRECTORY = ""
 
+# Where the IIP server is
+IIP_SERVER = "http://ddmal.music.mcgill.ca/fcgi-bin/iipsrv.fcgi?FIF=/mnt/images/salzinnes-original/"
+

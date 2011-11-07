@@ -75,7 +75,7 @@ class PageHandler(tornado.web.RequestHandler):
 
 class RootHandler(tornado.web.RequestHandler):
     def get(self):
-        self.render("templates/index.html")
+        self.render("templates/index.html", iip_server=conf.IIP_SERVER)
 
 class DivaHandler(tornado.web.RequestHandler):
     def get(self):
