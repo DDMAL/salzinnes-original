@@ -1327,14 +1327,14 @@ THE SOFTWARE.
             $('#search-box form').submit(function() {
                 var query = $('#search-box input').val();
                 var ajaxURL = '/search?q=' + query;
-                $.getJSON(ajaxURL, function(data) {
+                $.getJSON(ajaxURL + '&rows=20', function(data) {
                     $('#search-results').html(getSearchResults(data));
                     $('#clear-results').show();
                     $('#search-results div').click(function() {
                         highlightNextResult(this);
                     });
                     // Send off another request to fetch more results
-                    $.getJSON(ajaxURL + '&start=10&rows=all', function(data) {
+                    $.getJSON(ajaxURL + '&start=20&rows=all', function(data) {
                         if (data.length > 0) {
                             $('#search-results').append(getSearchResults(data));
                         }
