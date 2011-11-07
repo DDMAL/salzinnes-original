@@ -102,6 +102,7 @@ THE SOFTWARE.
             numClicks: 0,               // Hack for ctrl+double-clicking in Firefox on Mac
             numPages: 0,                // Number of pages in the array
             numRows: 0,                 // Number of rows
+            openIncipits: [],           // For preserving state of dropdown arrows
             pages: [],                  // An array containing the data for all the pages
             panelHeight: 0,             // Height of the panel. Set in initiateViewer()
             panelWidth: 0,              // Width of the panel. Set in initiateViewer()
@@ -333,14 +334,17 @@ THE SOFTWARE.
                 var toAppend = '';
                 for (var i = 0; i < data.length; i++) {
                     var incipit = data[i];
+                    var incipitID = String(data[i].id);
                     folio = incipit.folio;
                     var incipitName = incipit.incipit;
                     var feast = incipit.feastnameeng_strm[0];
                     if (jQuery.inArray(feast, feasts) == -1) {
                         feasts.push(feast);
                     }
-                    toAppend += '<h3 class="incipit">' + incipitName + '</h3>';
-                    toAppend += '<ul class="incipit-info">';
+                    toAppend += '<h3 class="incipit" data-id="' + incipitID + '">' + incipitName + '</h3>';
+                    toAppend += '<ul class="incipit-info"';
+                    toAppend += (settings.openIncipits.indexOf(incipitID) > 0) ? ' style="display: block;" ' : '';
+                    toAppend += '>';
                     incipit_data = {
                         'Mode': incipit.mode_strm,
                         'Office': incipit.office_strm,
@@ -366,6 +370,14 @@ THE SOFTWARE.
                 $('.incipit, .concordances').click(function() {
                     $(this).next().toggle();
                     $(this).toggleClass('arrow2');
+                    var incipitID = $(this).attr('data-id');
+                    // Add it to (or remove from) array of stored click things
+                    var incipitIndex = settings.openIncipits.indexOf(incipitID);
+                    if (incipitIndex < 0) {
+                        settings.openIncipits.push(incipitID);
+                    } else {
+                        delete settings.openIncipits[incipitIndex];
+                    }
                 });
             });
         };
