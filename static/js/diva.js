@@ -1303,6 +1303,12 @@ THE SOFTWARE.
                         } else {
                             highlightNextResult($('#search-results div')[0]);
                         }
+                    $('#clear-results').show();
+                    $('#clear-results').click(function() {
+                        $(this).fadeOut(50);
+                        $('#search-box input').val('');
+                        // Clear the search results pane too
+                        $('#search-results').text('');
                     });
                 });
                 return false;
