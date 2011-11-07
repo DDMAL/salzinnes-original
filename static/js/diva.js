@@ -1283,6 +1283,11 @@ THE SOFTWARE.
                     $('#search-results div').click(function() {
                         highlightNextResult(this);
                     });
+                    $('#clear-results').show();
+                    $('#clear-results').click(function() {
+                        $(this).hide();
+                        $('#search-box input').val('');
+                    });
                     $('#forward-icon').click(function() {
                         var currentlyActive = $('#search-results .active');
                         if (currentlyActive.length) {

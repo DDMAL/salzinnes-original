@@ -208,6 +208,23 @@ input:focus {
     }
 }
 
+#search-box #clear-results {
+    position: absolute;
+    top: 91px;
+    left: 181px;
+    width: 14px;
+    height: 14px;
+    .border-radius(9px);
+    background-color: @mediumGrey;
+    padding-top: 4px;
+    padding-left: 4px;
+    display: none;
+}
+
+#search-box #clear-results:active {
+    background-color: @darkGrey;
+}
+
 #search-box input {
     margin-top: 5px;
     height: 30px;
@@ -215,6 +232,7 @@ input:focus {
     border: 1px solid @mediumGrey;
     width: 200px;
     margin-left: 5px;
+    padding-right: 25px;
     color: @darkGrey;
     padding-left: 3px;
     font-size: 14px;
