@@ -347,7 +347,9 @@ THE SOFTWARE.
                     if (jQuery.inArray(feast, feasts) == -1) {
                         feasts.push(feast);
                     }
-                    toAppend += '<h3 class="incipit" data-id="' + incipitID + '">' + incipitName + '</h3>';
+                    toAppend += '<h3 class="incipit';
+                    toAppend += (settings.openIncipits.indexOf(incipitID) >= 0) ? ' arrow2"' : '"';
+                    toAppend += ' data-id="' + incipitID + '">' + incipitName + '</h3>';
                     toAppend += '<ul class="incipit-info"';
                     toAppend += (settings.openIncipits.indexOf(incipitID) >= 0) ? ' style="display: block;" ' : '';
                     toAppend += '>';
