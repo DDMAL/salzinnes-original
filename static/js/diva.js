@@ -327,7 +327,13 @@ THE SOFTWARE.
         // Helper function for setCurrentPage; should only be called at the end
         var updateCurrentPage = function(pageIndex) {
             var pageNumber = pageIndex + 1;
-            var ajaxURL = '/page/' + settings.pages[pageIndex].fn.substring(2, 6);
+            var folioNumber = settings.pages[pageIndex].fn;
+            if (folioNumber[0] == "1") {
+                folioNumber = folioNumber.substring(2, 6);
+            } else if (folioNumber[0] == "2") {
+                folioNumber = "A" + folioNumber.substring(3, 6);
+            }
+            var ajaxURL = '/page/' + folioNumber;
             var folio = 'N/A';
             var feasts = [];
             $.getJSON(ajaxURL, function(data) {
@@ -1258,10 +1264,24 @@ THE SOFTWARE.
             }
         };
 
+        var folioToTiff = function(folio) {
+            // Converts 003r -> 1-003.tif
+            // A19v -> 2-019.tif
+            if (folio[0].toUpperCase() == "A") {
+                var pagePrefix = "2-";
+                var pageNo = "0"+folio.substr(1);
+            } else {
+                var pagePrefix = "1-";
+                var pageNo = folio;
+            }
+            return pagePrefix + pageNo + '.tif';
+        };
+
         var highlightNextResult = function(currentResult) {
             $('#search-results div').removeClass('active');
             $(currentResult).addClass('active');
-            var pageIndex = getPageIndex('1-' + $(currentResult).attr('data-folio') + '.tif');
+            var folio = $(currentResult).attr('data-folio');
+            var pageIndex = getPageIndex(folioToTiff(folio));
             gotoPage(pageIndex+1);
         };
 
@@ -1291,7 +1311,8 @@ THE SOFTWARE.
                             standardText = data[i].incipit;
                         }
                         var folio = data[i].folio;
-                        var backgroundImage = settings.iipServerBaseUrl + '1-' + folio + '.tif' + '&WID=35&CVT=JPG';
+                        tifName = folioToTiff(folio);
+                        var backgroundImage = settings.iipServerBaseUrl + tifName + '&WID=35&CVT=JPG';
                         toAppend += '<div style="background-image: url(' + backgroundImage + ');" data-folio="' + folio + '">' + folio + ': ' + standardText + '</div>';
                     }
                     $('#search-results').html(toAppend);
