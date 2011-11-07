@@ -1642,7 +1642,20 @@ THE SOFTWARE.
             });
             
             $('#diva-goto-page').submit(function() {
-                var desiredPage = parseInt($('#diva-goto-page input').val(), 10);
+                var desiredPage, folioNumber, numChars;
+                var input = $('#diva-goto-page input').val();
+                var lastChar = input.charAt(input.length - 1);
+
+                // If the last character is an or a v, assume a folio number
+                if (lastChar == 'r' || lastChar == 'v') {
+                    // Pad it with zeroes
+                    while (input.length < 4) {
+                        input = '0' + input;
+                    }
+                    desiredPage = getPageIndex('1-' + input + '.tif') + 1;
+                } else {
+                    desiredPage = parseInt($('#diva-goto-page input').val(), 10);
+                }
 
                 if (!gotoPage(desiredPage)) {
                     alert("Invalid page number");
