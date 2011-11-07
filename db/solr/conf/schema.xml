@@ -311,6 +311,7 @@
    <dynamicField name="*_txt" type="text_general" indexed="true" stored="true" multiValued="true"/>
    <dynamicField name="*_strm" type="string" indexed="true" stored="true" multiValued="true"/>
    <dynamicField name="*_stored" type="string" indexed="false" stored="true" />
+   <copyField source="feastname_t" dest="feastname_strm" />
  </fields>
 
  <!-- Field to use to determine and enforce document uniqueness. 
