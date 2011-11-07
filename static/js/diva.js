@@ -1294,6 +1294,8 @@ THE SOFTWARE.
             // Fix to allow scrolling of left pane
             $('#search-outer').height(settings.panelHeight - $('#search-box').height());
             $('#search-results').width($('#search-outer').width() - settings.scrollbarWidth);
+            // Fix the size of the right pane too while we're at it
+            $('#info-outer').height(settings.panelHeight - settings.scrollbarWidth - 20);
 
             // Handler for the clear results button
             $('#clear-results').click(function() {
