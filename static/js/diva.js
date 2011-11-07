@@ -1261,8 +1261,11 @@ THE SOFTWARE.
                 var ajaxURL = '/search?q=' + query;
                 $.getJSON(ajaxURL, function(data) {
                     var toAppend = '';
-                    for (var i = 0; i < data.length; i++) {
-                        var divClass = i % 2 + 1;
+                    var numItems = data.length;
+                    if (numItems == 0) {
+                        toAppend = '<p class="no-results">There are no search results</p>';
+                    }
+                    for (var i = 0; i < numItems; i++) {
                         var standardText = "";
                         if ("feastname" in data[i].hl) {
                             standardText = data[i].incipit + " (" + data[i].hl.feastname[0] + ")";
@@ -1284,28 +1287,46 @@ THE SOFTWARE.
                         highlightNextResult(this);
                     });
                     $('#clear-results').show();
-                    $('#clear-results').click(function() {
-                        $(this).hide();
-                        $('#search-box input').val('');
-                    });
-                    $('#forward-icon').click(function() {
-                        var currentlyActive = $('#search-results .active');
-                        if (currentlyActive.length) {
-                            highlightNextResult($(currentlyActive[0]).next());
-                        } else {
-                            highlightNextResult($('#search-results div')[0]);
-                        }
-                    });
-                    $('#back-icon').click(function() {
-                        var currentlyActive = $('#search-results .active');
-                        if (currentlyActive.length) {
-                            highlightNextResult($(currentlyActive[0]).prev());
-                        } else {
-                            highlightNextResult($('#search-results div')[0]);
-                        }
-                    });
                 });
                 return false;
+            });
+
+            // Fix to allow scrolling of left pane
+            $('#search-outer').height(settings.panelHeight - $('#search-box').height());
+            $('#search-results').width($('#search-outer').width() - settings.scrollbarWidth);
+            // Fix the size of the right pane too while we're at it
+            $('#info-outer').height(settings.panelHeight - settings.scrollbarWidth - 20);
+
+            // Handler for the clear results button
+            $('#clear-results').click(function() {
+                $(this).fadeOut(50);
+                $('#search-box input').val('');
+                // Clear the search results pane too
+                $('#search-results').text('');
+            });
+
+            // Handler for the back and forward buttons
+            $('#back-icon, #forward-icon').click(function() {
+                var currentlyActive = $('#search-results .active');
+                if (currentlyActive.length) {
+                    var toHighlight = $(currentlyActive[0]);
+                    if ($(this).attr('id') == 'forward-icon') {
+                        toHighlight = toHighlight.next();
+                    } else {
+                        toHighlight = toHighlight.prev();
+                    }
+
+                    // If there's no next/previous, do nothing
+                    if (toHighlight.length) {
+                        highlightNextResult(toHighlight);
+                    }
+                } else {
+                    // Nothing is highlighted - select the first (if it exists)
+                    var searchResults = $('#search-results div');
+                    if (searchResults.length) {
+                        highlightNextResult(searchResults[0]);
+                    }
+                }
             });
             // Handle the grid toggle events
             if (settings.enableGrid) {
@@ -1483,6 +1504,10 @@ THE SOFTWARE.
                     settings.panelWidth = parseInt($(settings.elementSelector).width(), 10) - settings.scrollbarWidth - 570;
                     $(settings.outerSelector).height(settings.panelHeight + settings.scrollbarWidth);
                     $(settings.outerSelector).width(settings.panelWidth + settings.scrollbarWidth);
+                    // Adjust the side panel heights
+                    $('#search-outer').height(settings.panelHeight - $('#search-box').height());
+                    $('#info-outer').height(settings.panelHeight - 20 + settings.scrollbarWidth);
+
                     // Simulate scrolling down
                     adjustPages(1);
                 }, 10);
@@ -1627,7 +1652,20 @@ THE SOFTWARE.
             });
             
             $('#diva-goto-page').submit(function() {
-                var desiredPage = parseInt($('#diva-goto-page input').val(), 10);
+                var desiredPage, folioNumber, numChars;
+                var input = $('#diva-goto-page input').val();
+                var lastChar = input.charAt(input.length - 1);
+
+                // If the last character is an or a v, assume a folio number
+                if (lastChar == 'r' || lastChar == 'v') {
+                    // Pad it with zeroes
+                    while (input.length < 4) {
+                        input = '0' + input;
+                    }
+                    desiredPage = getPageIndex('1-' + input + '.tif') + 1;
+                } else {
+                    desiredPage = parseInt($('#diva-goto-page input').val(), 10);
+                }
 
                 if (!gotoPage(desiredPage)) {
                     alert("Invalid page number");

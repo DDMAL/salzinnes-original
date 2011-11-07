@@ -202,13 +202,11 @@ input:focus {
         position: fixed;
         right: 0px;
         height: 100%;
-        width: 275px;
-        padding: 10px;
-        overflow-y: auto;
+        width: 295px;
     }
 }
 
-#search-box #clear-results {
+#clear-results {
     position: absolute;
     top: 91px;
     left: 181px;
@@ -221,7 +219,7 @@ input:focus {
     display: none;
 }
 
-#search-box #clear-results:active {
+#clear-results:active {
     background-color: @darkGrey;
 }
 
@@ -278,9 +276,16 @@ input:focus {
     background-image: url('../img/arrow2.png');
 }
 
-#search-results {
-    height: 100%;
+// Needed for scroll it seems
+#search-outer, #info-outer {
     overflow-y: auto;
+}
+
+#info-outer {
+    padding: 10px;
+}
+
+#search-results {
     div {
         width: 215px;
         background-repeat: no-repeat;
@@ -299,5 +304,9 @@ input:focus {
     }
     div + div {
         border-top: solid 1px @lightGrey;
+    }
+    .no-results {
+        padding-top: 10px;
+        text-align: center;
     }
 }
