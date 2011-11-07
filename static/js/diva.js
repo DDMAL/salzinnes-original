@@ -349,7 +349,7 @@ THE SOFTWARE.
                     }
                     toAppend += '<h3 class="incipit" data-id="' + incipitID + '">' + incipitName + '</h3>';
                     toAppend += '<ul class="incipit-info"';
-                    toAppend += (settings.openIncipits.indexOf(incipitID) > 0) ? ' style="display: block;" ' : '';
+                    toAppend += (settings.openIncipits.indexOf(incipitID) >= 0) ? ' style="display: block;" ' : '';
                     toAppend += '>';
                     incipit_data = {
                         'Mode': incipit.mode_strm,
