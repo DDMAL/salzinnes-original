@@ -1268,15 +1268,21 @@ THE SOFTWARE.
 
         var folioToTiff = function(folio) {
             // Converts 003r -> 1-003.tif
+            // 23r --> 1-023r.tif
             // A19v -> 2-019.tif
+            // A1r --> 2-001.tif
+            var pagePrefix;
             if (folio[0].toUpperCase() == "A") {
-                var pagePrefix = "2-";
-                var pageNo = "0"+folio.substr(1);
+                pagePrefix = "2-";
+                folio = folio.substring(1);
             } else {
-                var pagePrefix = "1-";
-                var pageNo = folio;
+                pagePrefix = "1-";
             }
-            return pagePrefix + pageNo + '.tif';
+
+            while (folio.length < 4) {
+                folio = '0' + folio;
+            }
+            return pagePrefix + folio + '.tif';
         };
 
         var highlightNextResult = function(currentResult) {
@@ -1679,22 +1685,9 @@ THE SOFTWARE.
 
                 // If the last character is an or a v, assume a folio number
                 if (lastChar == 'r' || lastChar == 'v') {
-                    // Check if it's in the appendix or not
-                    isAppendix = (input[0] == 'A') ? true : false;
-                    if (isAppendix) {
-                        input = input.substring(1);
-                        prefix = '2-';
-                    } else {
-                        prefix = '1-';
-                    }
-
-                    // Pad it with zeroes
-                    while (input.length < 4) {
-                        input = '0' + input;
-                    }
-                    desiredPage = getPageIndex(prefix + input + '.tif') + 1;
+                    desiredPage = getPageIndex(folioToTiff(input)) + 1;
                 } else {
-                    desiredPage = parseInt($('#diva-goto-page input').val(), 10);
+                    desiredPage = parseInt(input, 10);
                 }
 
                 if (!gotoPage(desiredPage)) {
