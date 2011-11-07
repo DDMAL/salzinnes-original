@@ -103,24 +103,6 @@ div[id$="diva-title"] {
     position: fixed !important;
 }
 
-div[id$="diva-fullscreen"] {
-    position: absolute;
-    z-index: 8999;
-    top: 0;
-    left: 0;
-    width: 40px;
-    height: 40px;
-    background-image: url('../img/fullscreen.png');
-    background-repeat: no-repeat;
-    cursor: pointer;
-}
-
-div[id$="diva-link-fullscreen"] {
-    clear: left;
-    padding: 5px;
-    font-weight: bold;
-}
-
 div[id$="diva-link-popup"] {
     position: absolute;
     width: 290px;
@@ -130,16 +112,6 @@ div[id$="diva-link-popup"] {
     border: 1px solid #DDD;
     z-index: 10000;
     text-align: center;
-}
-
-div[id$="diva-link-popup-fullscreen"] {
-    position: absolute;
-    border: 1px solid #DDD;
-    z-index: 10000;
-    text-align: center;
-    background-color: #FFF;
-    padding: 5px;
-    width: 150px;
 }
 
 .diva-input {
