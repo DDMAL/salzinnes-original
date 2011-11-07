@@ -1504,8 +1504,10 @@ THE SOFTWARE.
                     settings.panelWidth = parseInt($(settings.elementSelector).width(), 10) - settings.scrollbarWidth - 570;
                     $(settings.outerSelector).height(settings.panelHeight + settings.scrollbarWidth);
                     $(settings.outerSelector).width(settings.panelWidth + settings.scrollbarWidth);
-                    // Adjust the search panel width
+                    // Adjust the side panel heights
                     $('#search-outer').height(settings.panelHeight - $('#search-box').height());
+                    $('#info-outer').height(settings.panelHeight - 20 + settings.scrollbarWidth);
+
                     // Simulate scrolling down
                     adjustPages(1);
                 }, 10);
