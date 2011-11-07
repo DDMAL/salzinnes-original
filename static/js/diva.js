@@ -1297,9 +1297,6 @@ THE SOFTWARE.
         var getSearchResults = function(data) {
             var toAppend = '';
             var numItems = data.length;
-            if (numItems == 0) {
-                toAppend = '<p class="no-results">There are no search results</p>';
-            }
             for (var i = 0; i < numItems; i++) {
                 var standardText = "";
                 if ("feastname" in data[i].hl) {
@@ -1327,17 +1324,26 @@ THE SOFTWARE.
             $('#search-box form').submit(function() {
                 var query = $('#search-box input').val();
                 var ajaxURL = '/search?q=' + query;
-                $.getJSON(ajaxURL, function(data) {
-                    $('#search-results').html(getSearchResults(data));
+                $.getJSON(ajaxURL + '&rows=20', function(data) {
+                    if (data.numFound == 0) {
+                        var resultInfo = '<p class="no-results">There are no search results</p>';
+                    } else {
+                        var resultInfo = '<p style="margin:0.5em">Found <b>' + data.numFound + '</b> results</p>';
+                    }
+                    $('#search-results').html(resultInfo);
+                    var searchResults = data.results;
+                    $('#search-results').append(getSearchResults(searchResults));
                     $('#clear-results').show();
+                    $('#search-results div').click(function() {
+                        highlightNextResult(this);
+                    });
                     // Send off another request to fetch more results
-                    $.getJSON(ajaxURL + '&start=10&rows=50', function(data) {
-                        if (data.length > 0) {
-                            $('#search-results').append(getSearchResults(data));
+                    $.getJSON(ajaxURL + '&start=20&rows=all', function(data) {
+                        if (data.results.length > 0) {
+                            $('#search-results').append(getSearchResults(data.results));
                         }
                         $('#search-results div').click(function() {
                             highlightNextResult(this); // needs to be handled better
-                            // None of the rows will be active until this is complete - problematic?
                         });
                     });
                 });

@@ -35,6 +35,7 @@ class SearchHandler(tornado.web.RequestHandler):
         else:
             rows = int(rows)
         response = solr_h.query(qstr, score=False, highlight="*", start=start, rows=rows)
+        numFound = response.numFound
         pages = []
         for d in response:
             p = {}
@@ -47,7 +48,8 @@ class SearchHandler(tornado.web.RequestHandler):
             pages.append(p)
         pages.sort(key=lambda d: (d["folio"], d["sequence"]))
         self.set_header("Content-Type", "application/json")
-        self.write(json.dumps(pages))       
+        ret = {"numFound": numFound, "results": pages}
+        self.write(json.dumps(ret))
 
 class PageHandler(tornado.web.RequestHandler):
     def get(self, pgno):
@@ -73,7 +75,7 @@ class PageHandler(tornado.web.RequestHandler):
 
 class RootHandler(tornado.web.RequestHandler):
     def get(self):
-        self.render("templates/index.html")
+        self.render("templates/index.html", iip_server=conf.IIP_SERVER)
 
 class DivaHandler(tornado.web.RequestHandler):
     def get(self):

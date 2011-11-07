@@ -3,6 +3,7 @@
 @viewerBg:      #EEE;
 @sideBg:        #E9F0F9;
 @lineColor:     #999;
+@leftPaneWidth: 295px;
 
 /* lol */
 * {
@@ -199,7 +200,7 @@ input:focus {
                 padding-left: 18px;
             }
         }
-        width: 275px;
+        width: @leftPaneWidth;
         border-right: 1px solid @lineColor;
     }
     #middle-pane {
@@ -221,8 +222,8 @@ input:focus {
 
 #clear-results {
     position: absolute;
-    top: 91px;
-    left: 181px;
+    top: 92px;
+    left: 201px;
     width: 14px;
     height: 14px;
     .border-radius(9px);
@@ -241,7 +242,7 @@ input:focus {
     height: 30px;
     .border-radius(10px);
     border: 1px solid @mediumGrey;
-    width: 200px;
+    width: @leftPaneWidth - 75px;
     margin-left: 5px;
     padding-right: 25px;
     color: @darkGrey;
@@ -302,7 +303,7 @@ input:focus {
 
 #search-results {
     div {
-        width: 200px;
+        width: @leftPaneWidth - 75px;
         background-repeat: no-repeat;
         background-position: 4px center;
         height: 40px;
