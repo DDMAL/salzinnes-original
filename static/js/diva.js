@@ -1685,7 +1685,7 @@ THE SOFTWARE.
 
                 // If the last character is an or a v, assume a folio number
                 if (lastChar == 'r' || lastChar == 'v') {
-                    desiredPage = getPageIndex(folioToTiff(input));
+                    desiredPage = getPageIndex(folioToTiff(input)) + 1;
                 } else {
                     desiredPage = parseInt(input, 10);
                 }
