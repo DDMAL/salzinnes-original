@@ -34,7 +34,6 @@ div[id$="diva-inner"] {
 div[id$="diva-outer"] {
     position: relative;
     overflow: auto;
-    background-color: #777;
 }
 
 .diva-page {
