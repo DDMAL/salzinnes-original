@@ -1293,6 +1293,34 @@ THE SOFTWARE.
             gotoPage(pageIndex+1);
         };
 
+        // Returns stuff to append
+        var getSearchResults = function(data) {
+            var toAppend = '';
+            var numItems = data.length;
+            if (numItems == 0) {
+                toAppend = '<p class="no-results">There are no search results</p>';
+            }
+            for (var i = 0; i < numItems; i++) {
+                var standardText = "";
+                if ("feastname" in data[i].hl) {
+                    standardText = data[i].incipit + " (" + data[i].hl.feastname[0] + ")";
+                } else if ("feastnameeng" in data[i].hl) {
+                    standardText = data[i].incipit + " (" + data[i].hl.feastnameeng[0] + ")";
+                } else if ("fullstandardtext" in data[i].hl) {
+                    standardText = data[i].hl.fullstandardtext[0];
+                } else if ("fullmanuscripttext" in data[i].hl) {
+                    standardText = data[i].hl.fullmanuscripttext[0];
+                } else {
+                    standardText = data[i].incipit;
+                }
+                var folio = data[i].folio;
+                tifName = folioToTiff(folio);
+                var backgroundImage = settings.iipServerBaseUrl + tifName + '&WID=35&CVT=JPG';
+                toAppend += '<div style="background-image: url(' + backgroundImage + ');" data-folio="' + folio + '">' + folio + ': ' + standardText + '</div>';
+            }
+            return toAppend;
+        };
+
         // Handles all the events
         var handleEvents = function() {
             // Handle the search form submission
@@ -1300,34 +1328,18 @@ THE SOFTWARE.
                 var query = $('#search-box input').val();
                 var ajaxURL = '/search?q=' + query;
                 $.getJSON(ajaxURL, function(data) {
-                    var toAppend = '';
-                    var numItems = data.length;
-                    if (numItems == 0) {
-                        toAppend = '<p class="no-results">There are no search results</p>';
-                    }
-                    for (var i = 0; i < numItems; i++) {
-                        var standardText = "";
-                        if ("feastname" in data[i].hl) {
-                            standardText = data[i].incipit + " (" + data[i].hl.feastname[0] + ")";
-                        } else if ("feastnameeng" in data[i].hl) {
-                            standardText = data[i].incipit + " (" + data[i].hl.feastnameeng[0] + ")";
-                        } else if ("fullstandardtext" in data[i].hl) {
-                            standardText = data[i].hl.fullstandardtext[0];
-                        } else if ("fullmanuscripttext" in data[i].hl) {
-                            standardText = data[i].hl.fullmanuscripttext[0];
-                        } else {
-                            standardText = data[i].incipit;
-                        }
-                        var folio = data[i].folio;
-                        tifName = folioToTiff(folio);
-                        var backgroundImage = settings.iipServerBaseUrl + tifName + '&WID=35&CVT=JPG';
-                        toAppend += '<div style="background-image: url(' + backgroundImage + ');" data-folio="' + folio + '">' + folio + ': ' + standardText + '</div>';
-                    }
-                    $('#search-results').html(toAppend);
-                    $('#search-results div').click(function() {
-                        highlightNextResult(this);
-                    });
+                    $('#search-results').html(getSearchResults(data));
                     $('#clear-results').show();
+                    // Send off another request to fetch more results
+                    $.getJSON(ajaxURL + '&start=10&rows=50', function(data) {
+                        if (data.length > 0) {
+                            $('#search-results').append(getSearchResults(data));
+                        }
+                        $('#search-results div').click(function() {
+                            highlightNextResult(this); // needs to be handled better
+                            // None of the rows will be active until this is complete - problematic?
+                        });
+                    });
                 });
                 return false;
             });
