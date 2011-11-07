@@ -1330,14 +1330,16 @@ THE SOFTWARE.
                 $.getJSON(ajaxURL, function(data) {
                     $('#search-results').html(getSearchResults(data));
                     $('#clear-results').show();
+                    $('#search-results div').click(function() {
+                        highlightNextResult(this);
+                    });
                     // Send off another request to fetch more results
-                    $.getJSON(ajaxURL + '&start=10&rows=50', function(data) {
+                    $.getJSON(ajaxURL + '&start=10&rows=all', function(data) {
                         if (data.length > 0) {
                             $('#search-results').append(getSearchResults(data));
                         }
                         $('#search-results div').click(function() {
                             highlightNextResult(this); // needs to be handled better
-                            // None of the rows will be active until this is complete - problematic?
                         });
                     });
                 });
