@@ -1261,8 +1261,11 @@ THE SOFTWARE.
                 var ajaxURL = '/search?q=' + query;
                 $.getJSON(ajaxURL, function(data) {
                     var toAppend = '';
-                    for (var i = 0; i < data.length; i++) {
-                        var divClass = i % 2 + 1;
+                    var numItems = data.length;
+                    if (numItems == 0) {
+                        toAppend = '<p class="no-results">There are no search results</p>';
+                    }
+                    for (var i = 0; i < numItems; i++) {
                         var standardText = "";
                         if ("feastname" in data[i].hl) {
                             standardText = data[i].incipit + " (" + data[i].hl.feastname[0] + ")";
@@ -1284,34 +1287,40 @@ THE SOFTWARE.
                         highlightNextResult(this);
                     });
                     $('#clear-results').show();
-                    $('#clear-results').click(function() {
-                        $(this).hide();
-                        $('#search-box input').val('');
-                    });
-                    $('#forward-icon').click(function() {
-                        var currentlyActive = $('#search-results .active');
-                        if (currentlyActive.length) {
-                            highlightNextResult($(currentlyActive[0]).next());
-                        } else {
-                            highlightNextResult($('#search-results div')[0]);
-                        }
-                    });
-                    $('#back-icon').click(function() {
-                        var currentlyActive = $('#search-results .active');
-                        if (currentlyActive.length) {
-                            highlightNextResult($(currentlyActive[0]).prev());
-                        } else {
-                            highlightNextResult($('#search-results div')[0]);
-                        }
-                    $('#clear-results').show();
-                    $('#clear-results').click(function() {
-                        $(this).fadeOut(50);
-                        $('#search-box input').val('');
-                        // Clear the search results pane too
-                        $('#search-results').text('');
-                    });
                 });
                 return false;
+            });
+
+            // Handler for the clear results button
+            $('#clear-results').click(function() {
+                $(this).fadeOut(50);
+                $('#search-box input').val('');
+                // Clear the search results pane too
+                $('#search-results').text('');
+            });
+
+            // Handler for the back and forward buttons
+            $('#back-icon, #forward-icon').click(function() {
+                var currentlyActive = $('#search-results .active');
+                if (currentlyActive.length) {
+                    var toHighlight = $(currentlyActive[0]);
+                    if ($(this).attr('id') == 'forward-icon') {
+                        toHighlight = toHighlight.next();
+                    } else {
+                        toHighlight = toHighlight.prev();
+                    }
+
+                    // If there's no next/previous, do nothing
+                    if (toHighlight.length) {
+                        highlightNextResult(toHighlight);
+                    }
+                } else {
+                    // Nothing is highlighted - select the first (if it exists)
+                    var searchResults = $('#search-results div');
+                    if (searchResults.length) {
+                        highlightNextResult(searchResults[0]);
+                    }
+                }
             });
             // Handle the grid toggle events
             if (settings.enableGrid) {
