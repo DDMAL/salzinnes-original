@@ -1268,15 +1268,21 @@ THE SOFTWARE.
 
         var folioToTiff = function(folio) {
             // Converts 003r -> 1-003.tif
+            // 23r --> 1-023r.tif
             // A19v -> 2-019.tif
+            // A1r --> 2-001.tif
+            var pagePrefix;
             if (folio[0].toUpperCase() == "A") {
-                var pagePrefix = "2-";
-                var pageNo = "0"+folio.substr(1);
+                pagePrefix = "2-";
+                folio = folio.substring(1);
             } else {
-                var pagePrefix = "1-";
-                var pageNo = folio;
+                pagePrefix = "1-";
             }
-            return pagePrefix + pageNo + '.tif';
+
+            while (folio.length < 4) {
+                folio = '0' + folio;
+            }
+            return pagePrefix + folio + '.tif';
         };
 
         var highlightNextResult = function(currentResult) {
