@@ -1291,12 +1291,6 @@ THE SOFTWARE.
                 return false;
             });
 
-            // Fix to allow scrolling of left pane
-            $('#search-outer').height(settings.panelHeight - $('#search-box').height());
-            $('#search-results').width($('#search-outer').width() - settings.scrollbarWidth);
-            // Fix the size of the right pane too while we're at it
-            $('#info-outer').height(settings.panelHeight - settings.scrollbarWidth - 20);
-
             // Handler for the clear results button
             $('#clear-results').click(function() {
                 $(this).fadeOut(50);
@@ -1499,15 +1493,7 @@ THE SOFTWARE.
             $(window).resize(function() {
                 clearTimeout(resizeTimer);
                 resizeTimer = setTimeout(function() {
-                    settings.panelHeight = parseInt($(settings.elementSelector).height(), 10) - settings.scrollbarWidth - 80;
-                    // THE BELOW NEEDS TO BE FIXED
-                    settings.panelWidth = parseInt($(settings.elementSelector).width(), 10) - settings.scrollbarWidth - 570;
-                    $(settings.outerSelector).height(settings.panelHeight + settings.scrollbarWidth);
-                    $(settings.outerSelector).width(settings.panelWidth + settings.scrollbarWidth);
-                    // Adjust the side panel heights
-                    $('#search-outer').height(settings.panelHeight - $('#search-box').height());
-                    $('#info-outer').height(settings.panelHeight - 20 + settings.scrollbarWidth);
-
+                    resizePanels();
                     // Simulate scrolling down
                     adjustPages(1);
                 }, 10);
@@ -1751,6 +1737,23 @@ THE SOFTWARE.
             }
         };
 
+        // It should only need to resize side panel widths the first time
+        var resizePanels = function() {
+            // Get the new panel height and width
+            settings.panelHeight = $(settings.elementSelector).height() - settings.scrollbarWidth -  $('#diva-toolbar').height();
+            // The side panels are fixed width so subtract those widths
+            settings.panelWidth = $(settings.elementSelector).width() - settings.scrollbarWidth - $('#left-pane').width() - $('#right-pane').width();
+
+            // Set the width and height of the viewer
+            // I'm not sure why you can't just ignore the scrollbar but you can't
+            $(settings.outerSelector).height(settings.panelHeight + settings.scrollbarWidth);
+            $(settings.outerSelector).width(settings.panelWidth + settings.scrollbarWidth);
+
+            // Adjust the side panel heights
+            $('#search-outer').height(settings.panelHeight - $('#search-box').height() + settings.scrollbarWidth);
+            $('#info-outer').height(settings.panelHeight - 20 + settings.scrollbarWidth);
+        }
+
         var init = function() {
             // First figure out the width of the scrollbar in this browser
             settings.scrollbarWidth = $.getScrollbarWidth();
@@ -1811,11 +1814,7 @@ THE SOFTWARE.
                 $(settings.outerSelector).css('height', settings.panelHeight + 'px');
             } else {
                 // For other devices, adjust to take the scrollbar into account
-                // STOP IT WITH THE MAGIC NUMBERS
-                settings.panelWidth = parseInt($(settings.elementSelector).width(), 10) - 570 - settings.scrollbarWidth;
-                settings.panelHeight = parseInt($(settings.elementSelector).height(), 10) + settings.scrollbarWidth - 80;
-                $(settings.outerSelector).width(settings.panelWidth + settings.scrollbarWidth);
-                $(settings.outerSelector).height(settings.panelHeight - settings.scrollbarWidth);
+                resizePanels();
             }
             
             
