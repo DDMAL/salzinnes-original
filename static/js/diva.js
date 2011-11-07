@@ -343,7 +343,7 @@ THE SOFTWARE.
                     var incipitID = String(data[i].id);
                     folio = incipit.folio;
                     var incipitName = incipit.incipit;
-                    var feast = incipit.feastnameeng_strm[0];
+                    var feast = incipit.feastnameeng[0];
                     if (jQuery.inArray(feast, feasts) == -1) {
                         feasts.push(feast);
                     }
@@ -360,7 +360,7 @@ THE SOFTWARE.
                         'Liturgical Position': incipit.position_stored,
                         'Standard Text': incipit.fullstandardtext,
                         'Manuscript Text': incipit.fullmanuscripttext,
-                        'Feast Name': incipit.feastname + ' (<em>' + incipit.feastnameeng_strm + '</em>)',
+                        'Feast Name': incipit.feastname + ' (<em>' + incipit.feastnameeng + '</em>)',
                         'CAO Number': incipit.caonumber,
                     }
                     for (li_item in incipit_data) {
@@ -1303,8 +1303,8 @@ THE SOFTWARE.
                         var standardText = "";
                         if ("feastname" in data[i].hl) {
                             standardText = data[i].incipit + " (" + data[i].hl.feastname[0] + ")";
-                        } else if ("feastnameeng_strm" in data[i].hl) {
-                            standardText = data[i].incipit + " (" + data[i].hl.feastnameeng_strm[0] + ")";
+                        } else if ("feastnameeng" in data[i].hl) {
+                            standardText = data[i].incipit + " (" + data[i].hl.feastnameeng[0] + ")";
                         } else if ("fullstandardtext" in data[i].hl) {
                             standardText = data[i].hl.fullstandardtext[0];
                         } else if ("fullmanuscripttext" in data[i].hl) {
