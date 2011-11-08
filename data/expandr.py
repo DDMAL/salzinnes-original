@@ -2,7 +2,6 @@
 
 import sys
 import os
-import couchdb
 from optparse import OptionParser
 import csv
 import logging
@@ -142,9 +141,14 @@ if __name__ == "__main__":
             csvoutfile.writerow(record.keys())
         # print record['Concordances']
 
-        fea = record["FeastCode"]
+        fea = unicode(record["FeastCode"])
+        if len(fea) == 7:
+            fea = u"0{0}".format(fea)
+
+        
         if fea in feasts.keys():
             record["FeastNameEng"] = feasts[fea]
+            print "Found {0}".format(feasts[fea])
         else:
             record["FeastNameEng"] = ""
 
