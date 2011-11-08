@@ -1344,7 +1344,7 @@ THE SOFTWARE.
                     var fillerBox = '';
                     if (data.numFound > 20) {
                         var fillerHeight = (data.numFound - 20) * 61; // the height of the box
-                        fillerBox += '<div id="search-filler" style="width: 100%; height: ' + fillerHeight + 'px"><p class="result-info">Loading results ...</p></div>';
+                        fillerBox += '<div id="search-filler" style="width: 100%; height: ' + fillerHeight + 'px"><p class="result-info">Loading more results ...</p></div>';
                     }
 
                     var searchResults = data.results;
