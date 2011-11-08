@@ -1322,7 +1322,7 @@ THE SOFTWARE.
                 var folio = data[i].folio;
                 tifName = folioToTiff(folio);
                 var backgroundImage = settings.iipServerBaseUrl + tifName + '&WID=35&CVT=JPG';
-                toAppend += '<div style="background-image: url(' + backgroundImage + ');" data-folio="' + folio + '" data-incipit="' + data[i].id + '">' + folio + ': ' + standardText + '</div>';
+                toAppend += '<div class="result" style="background-image: url(' + backgroundImage + ');" data-folio="' + folio + '" data-incipit="' + data[i].id + '">' + folio + ': ' + standardText + '</div>';
             }
             return toAppend;
         };
@@ -1333,15 +1333,21 @@ THE SOFTWARE.
             $('#search-box form').submit(function() {
                 var query = $('#search-box input').val();
                 var ajaxURL = '/search?q=' + query;
+                $('#search-results').text(''); // clear the pane first
                 $.getJSON(ajaxURL + '&rows=20', function(data) {
-                    if (data.numFound == 0) {
-                        var resultInfo = '<p class="no-results">There are no search results</p>';
-                    } else {
-                        var resultInfo = '<p style="margin:0.5em">Found <b>' + data.numFound + '</b> results</p>';
+                    var resultInfo = '<p class="result-info">';
+                    resultInfo += (data.numFound == 0) ? 'There are no search results.' : 'Found <strong>' + data.numFound + '</strong> results.';
+                    resultInfo += '</p>';
+
+                    // Filler box to pad the length of the box so that it doesn't change after query #2
+                    var fillerBox = '';
+                    if (data.numFound > 20) {
+                        var fillerHeight = (data.numFound - 20) * 61; // the height of the box
+                        fillerBox += '<div id="search-filler" style="width: 100%; height: ' + fillerHeight + 'px"><p class="result-info">Loading results ...</p></div>';
                     }
-                    $('#search-results').html(resultInfo);
+
                     var searchResults = data.results;
-                    $('#search-results').append(getSearchResults(searchResults));
+                    $('#search-results').html(resultInfo + getSearchResults(searchResults) + fillerBox);
                     $('#clear-results').show();
                     $('#search-results div').click(function() {
                         highlightNextResult(this);
@@ -1349,7 +1355,7 @@ THE SOFTWARE.
                     // Send off another request to fetch more results
                     $.getJSON(ajaxURL + '&start=20&rows=all', function(data) {
                         if (data.results.length > 0) {
-                            $('#search-results').append(getSearchResults(data.results));
+                            $('#search-filler').replaceWith(getSearchResults(data.results));
                         }
                         $('#search-results div').click(function() {
                             highlightNextResult(this); // needs to be handled better

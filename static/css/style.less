@@ -302,7 +302,7 @@ input:focus {
 }
 
 #search-results {
-    div {
+    .result {
         width: @leftPaneWidth - 75px;
         background-repeat: no-repeat;
         background-position: 4px center;
@@ -318,10 +318,10 @@ input:focus {
         .pretty-text;
         color: #FFF;
     }
-    div + div {
+    .result + .result {
         border-top: solid 1px @lightGrey;
     }
-    .no-results {
+    .result-info {
         padding-top: 10px;
         text-align: center;
     }
