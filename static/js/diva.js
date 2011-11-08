@@ -338,38 +338,42 @@ THE SOFTWARE.
             var feasts = [];
             $.getJSON(ajaxURL, function(data) {
                 var toAppend = '';
-                for (var i = 0; i < data.length; i++) {
-                    var incipit = data[i];
-                    var incipitID = String(data[i].id);
-                    folio = incipit.folio;
-                    var incipitName = incipit.incipit;
-                    var feast = incipit.feastnameeng;
-                    if (jQuery.inArray(feast, feasts) == -1) {
-                        feasts.push(feast);
+                if (data.length == 1 && data[0].continuation != "") {
+                    var toAppend = '<p class="larger-text">This folio is a continuation of ' + data[0].continuation + '</p>';
+                } else {
+                    for (var i = 0; i < data.length; i++) {
+                        var incipit = data[i];
+                        var incipitID = String(data[i].id);
+                        folio = incipit.folio;
+                        var incipitName = incipit.incipit;
+                        var feast = incipit.feastnameeng;
+                        if (jQuery.inArray(feast, feasts) == -1) {
+                            feasts.push(feast);
+                        }
+                        toAppend += '<h3 class="incipit';
+                        toAppend += (settings.openIncipits.indexOf(incipitID) >= 0) ? ' arrow2"' : '"';
+                        toAppend += ' data-id="' + incipitID + '">' + incipitName + '</h3>';
+                        toAppend += '<ul class="incipit-info"';
+                        toAppend += (settings.openIncipits.indexOf(incipitID) >= 0) ? ' style="display: block;" ' : '';
+                        toAppend += '>';
+                        incipit_data = {
+                            'Mode': incipit.mode_strm,
+                            'Office': incipit.office_strm,
+                            'Genre': incipit.genre_strm,
+                            'Liturgical Position': incipit.position_stored,
+                            'Standard Text': incipit.fullstandardtext,
+                            'Manuscript Text': incipit.fullmanuscripttext,
+                            'Feast Name': incipit.feastname + ' (<em>' + incipit.feastnameeng + '</em>)',
+                            'CAO Number': incipit.caonumber,
+                        }
+                        for (li_item in incipit_data) {
+                            toAppend += '<li><strong>' + li_item + ':</strong> ' + incipit_data[li_item] + '</li>';
+                        }
+                        if (incipit.concordances_strm[0]) {
+                            toAppend += '<li><p class="concordances">Concordances:</p><ul><li>' + incipit.concordances_strm.join('</li>\n<li>') + '</li></ul></li>';
+                        }
+                        toAppend += '</ul>';
                     }
-                    toAppend += '<h3 class="incipit';
-                    toAppend += (settings.openIncipits.indexOf(incipitID) >= 0) ? ' arrow2"' : '"';
-                    toAppend += ' data-id="' + incipitID + '">' + incipitName + '</h3>';
-                    toAppend += '<ul class="incipit-info"';
-                    toAppend += (settings.openIncipits.indexOf(incipitID) >= 0) ? ' style="display: block;" ' : '';
-                    toAppend += '>';
-                    incipit_data = {
-                        'Mode': incipit.mode_strm,
-                        'Office': incipit.office_strm,
-                        'Genre': incipit.genre_strm,
-                        'Liturgical Position': incipit.position_stored,
-                        'Standard Text': incipit.fullstandardtext,
-                        'Manuscript Text': incipit.fullmanuscripttext,
-                        'Feast Name': incipit.feastname + ' (<em>' + incipit.feastnameeng + '</em>)',
-                        'CAO Number': incipit.caonumber,
-                    }
-                    for (li_item in incipit_data) {
-                        toAppend += '<li><strong>' + li_item + ':</strong> ' + incipit_data[li_item] + '</li>';
-                    }
-                    if (incipit.concordances_strm[0]) {
-                        toAppend += '<li><p class="concordances">Concordances:</p><ul><li>' + incipit.concordances_strm.join('</li>\n<li>') + '</li></ul></li>';
-                    }
-                    toAppend += '</ul>';
                 }
                 // Append at the end
                 $("#current-folio-feasts span").text(feasts.join("; "));
