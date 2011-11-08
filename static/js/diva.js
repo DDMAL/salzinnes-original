@@ -399,18 +399,19 @@ THE SOFTWARE.
         var setCurrentPage = function(direction) {
             var currentPage = settings.currentPageIndex;
             var pageToConsider = settings.currentPageIndex + parseInt(direction, 10);
+            var viewportMiddle = settings.panelHeight / 2;
             var changeCurrentPage = false;
 
             // When scrolling up:
             if (direction < 0) {
-                // If the previous page > top of viewport
-                if (pageToConsider >= 0 && (settings.heightAbovePages[pageToConsider] + settings.pages[pageToConsider].h + (settings.verticalPadding) >= settings.scrollSoFar)) {
+                // If the previous page > middle of viewport
+                if (pageToConsider >= 0 && (settings.heightAbovePages[pageToConsider] + settings.pages[pageToConsider].h + (settings.verticalPadding) >= settings.scrollSoFar + viewportMiddle)) {
                     changeCurrentPage = true;
                 }
             } else if (direction > 0) {
                 // When scrolling down:
-                // If this page < top of viewport
-                if (settings.heightAbovePages[currentPage] + settings.pages[currentPage].h + settings.verticalPadding < settings.scrollSoFar) {
+                // If this page < middle of viewport
+                if (settings.heightAbovePages[currentPage] + settings.pages[currentPage].h + settings.verticalPadding < settings.scrollSoFar + viewportMiddle) {
                     changeCurrentPage = true;
                 }
             }
