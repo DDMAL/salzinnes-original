@@ -85,6 +85,13 @@ class DivaHandler(tornado.web.RequestHandler):
         self.set_header("Content-Type", "application/json")
         self.write(json.dumps(info))
 
+class FeastHandler(tornado.web.RequestHandler):
+    def get(self):
+        response = solr_h.query("*:*", score=False, rows=0, facet="true", facet_field="feastname_strm")
+        fields = response.facet_counts.get("facet_fields", {}).get("feastname_strm", {})
+        self.set_header("Content-Type", "application/json")
+        self.write(json.dumps(fields))
+
 settings = {
     "static_path": os.path.join(os.path.dirname(__file__), "static"),
     "debug": True,
@@ -96,6 +103,7 @@ application = tornado.web.Application([
     (r"/divaserve/?", DivaHandler),
     (r"/search", SearchHandler),
     (r"/page/(.*)", PageHandler),
+    (r"/feasts", FeastHandler),
     ], **settings)
 
 def main(port):
