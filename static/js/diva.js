@@ -1295,7 +1295,7 @@ THE SOFTWARE.
             var folio = $(currentResult).attr('data-folio');
             var incipitID = $(currentResult).attr('data-incipit');
             // Make the relevant incipit automatically open when this result is clicked
-            if (settings.openIncipits.indexOf(incipitID) <= 0) {
+            if (settings.openIncipits.indexOf(incipitID) < 0) {
                 settings.openIncipits.push(incipitID);
             }
             var pageIndex = getPageIndex(folioToTiff(folio));
