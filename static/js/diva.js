@@ -1250,10 +1250,18 @@ THE SOFTWARE.
             settings.desiredXOffset = getXOffset();
             settings.desiredYOffset = getYOffset();
             settings.inGrid = true;
+            // Hide the left and right panels
+            $('#left-pane').hide().width(0);
+            $('#right-pane').hide().width(0);
+            resizePanels();
             loadGrid();
         };
 
         var leaveGrid = function(preventLoad) {
+            // Bring the left and right panels back
+            $('#left-pane').width(295).show(); // doesn't need inline-block for some reason
+            $('#right-pane').width(295).css('display', 'inline-block'); // needs inline-block to show up
+            resizePanels();
             // Save the grid top offset
             settings.gridScrollTop = $(settings.outerSelector).scrollTop();
             settings.inGrid = false;
