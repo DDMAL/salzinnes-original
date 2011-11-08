@@ -1293,6 +1293,11 @@ THE SOFTWARE.
             $('#search-results div').removeClass('active');
             $(currentResult).addClass('active');
             var folio = $(currentResult).attr('data-folio');
+            var incipitID = $(currentResult).attr('data-incipit');
+            // Make the relevant incipit automatically open when this result is clicked
+            if (settings.openIncipits.indexOf(incipitID) <= 0) {
+                settings.openIncipits.push(incipitID);
+            }
             var pageIndex = getPageIndex(folioToTiff(folio));
             gotoPage(pageIndex+1);
         };
@@ -1317,7 +1322,7 @@ THE SOFTWARE.
                 var folio = data[i].folio;
                 tifName = folioToTiff(folio);
                 var backgroundImage = settings.iipServerBaseUrl + tifName + '&WID=35&CVT=JPG';
-                toAppend += '<div style="background-image: url(' + backgroundImage + ');" data-folio="' + folio + '">' + folio + ': ' + standardText + '</div>';
+                toAppend += '<div style="background-image: url(' + backgroundImage + ');" data-folio="' + folio + '" data-incipit="' + data[i].id + '">' + folio + ': ' + standardText + '</div>';
             }
             return toAppend;
         };
