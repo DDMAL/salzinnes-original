@@ -1370,7 +1370,7 @@ THE SOFTWARE.
                     }
 
                     // If there's no next/previous, do nothing
-                    if (toHighlight.length) {
+                    if (toHighlight.length && toHighlight[0].tagName == 'DIV') {
                         highlightNextResult(toHighlight);
                     }
                 } else {
