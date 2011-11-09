@@ -58,7 +58,10 @@ class PageHandler(tornado.web.RequestHandler):
             query = "folio_t:%s OR (folio_t:%s AND (fullmanuscripttext_t:%s OR fullstandardtext_t:%s))" % (pgno, pgno, q, q)
         else:
             query = "folio_t:%s" % pgno
-        response = solr_h.query(query, score=False, highlight="*")
+        response = solr_h.query(query, score=False, highlight="*", rows=20, sort="sequence_t asc")
+        # Do 1 query and hope we get them all. If not, do another one
+        if response.numFound > 20:
+            response = solr_h.query(query, score=False, highlight="*", rows=response.numFound)
         pages = []
         for d in response:
             p = {}
@@ -69,7 +72,7 @@ class PageHandler(tornado.web.RequestHandler):
             for k,v in hl.iteritems():
                 p["hl"][k.replace("_t", "")] = v
             pages.append(p)
-        pages.sort(key=itemgetter("sequence"))
+        pages.sort(key=lambda d: int(d["sequence"]))
         self.set_header("Content-Type", "application/json")
         self.write(json.dumps(pages))
 
