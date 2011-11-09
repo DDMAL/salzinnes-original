@@ -399,18 +399,19 @@ THE SOFTWARE.
         var setCurrentPage = function(direction) {
             var currentPage = settings.currentPageIndex;
             var pageToConsider = settings.currentPageIndex + parseInt(direction, 10);
+            var viewportMiddle = settings.panelHeight / 2;
             var changeCurrentPage = false;
 
             // When scrolling up:
             if (direction < 0) {
-                // If the previous page > top of viewport
-                if (pageToConsider >= 0 && (settings.heightAbovePages[pageToConsider] + settings.pages[pageToConsider].h + (settings.verticalPadding) >= settings.scrollSoFar)) {
+                // If the previous page > middle of viewport
+                if (pageToConsider >= 0 && (settings.heightAbovePages[pageToConsider] + settings.pages[pageToConsider].h + (settings.verticalPadding) >= settings.scrollSoFar + viewportMiddle)) {
                     changeCurrentPage = true;
                 }
             } else if (direction > 0) {
                 // When scrolling down:
-                // If this page < top of viewport
-                if (settings.heightAbovePages[currentPage] + settings.pages[currentPage].h + settings.verticalPadding < settings.scrollSoFar) {
+                // If this page < middle of viewport
+                if (settings.heightAbovePages[currentPage] + settings.pages[currentPage].h + settings.verticalPadding < settings.scrollSoFar + viewportMiddle) {
                     changeCurrentPage = true;
                 }
             }
@@ -1249,10 +1250,18 @@ THE SOFTWARE.
             settings.desiredXOffset = getXOffset();
             settings.desiredYOffset = getYOffset();
             settings.inGrid = true;
+            // Hide the left and right panels
+            $('#left-pane').hide().width(0);
+            $('#right-pane').hide().width(0);
+            resizePanels();
             loadGrid();
         };
 
         var leaveGrid = function(preventLoad) {
+            // Bring the left and right panels back
+            $('#left-pane').width(295).show(); // doesn't need inline-block for some reason
+            $('#right-pane').width(295).css('display', 'inline-block'); // needs inline-block to show up
+            resizePanels();
             // Save the grid top offset
             settings.gridScrollTop = $(settings.outerSelector).scrollTop();
             settings.inGrid = false;
@@ -1343,7 +1352,7 @@ THE SOFTWARE.
                     var fillerBox = '';
                     if (data.numFound > 20) {
                         var fillerHeight = (data.numFound - 20) * 61; // the height of the box
-                        fillerBox += '<div id="search-filler" style="width: 100%; height: ' + fillerHeight + 'px"><p class="result-info">Loading results ...</p></div>';
+                        fillerBox += '<div id="search-filler" style="width: 100%; height: ' + fillerHeight + 'px"><p class="result-info">Loading more results ...</p></div>';
                     }
 
                     var searchResults = data.results;
