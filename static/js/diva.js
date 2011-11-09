@@ -333,7 +333,7 @@ THE SOFTWARE.
             } else if (folioNumber[0] == "2") {
                 folioNumber = "A" + folioNumber.substring(3, 6);
             }
-            var ajaxURL = '/page/' + folioNumber;
+            var ajaxURL = settings.appRoot + '/page/' + folioNumber;
             var folio = 'N/A';
             var feasts = [];
             $.getJSON(ajaxURL, function(data) {
@@ -1341,7 +1341,7 @@ THE SOFTWARE.
             // Handle the search form submission
             $('#search-box form').submit(function() {
                 var query = $('#search-box input').val();
-                var ajaxURL = '/search?q=' + query;
+                var ajaxURL = settings.appRoot + '/search?q=' + query;
                 $('#search-results').text(''); // clear the pane first
                 $.getJSON(ajaxURL + '&rows=20', function(data) {
                     var resultInfo = '<p class="result-info">';

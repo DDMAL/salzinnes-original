@@ -1,23 +1,24 @@
 <html>
 <head>
     <title>Salzinnes Antiphonal (CDN-Hsmu M2149.L4)</title>
-    <link rel="stylesheet/less" type="text/css" href="{{path}}{{static_url("css/style.less")}}" />
-    <link rel="stylesheet" href="{{path}}{{static_url("css/diva.css")}}" type="text/css" />
-    <link rel="stylesheet" href="{{path}}{{static_url("css/jquery-ui.css")}}" type="text/css" />
-    <script src="{{path}}{{static_url("js/less-1.1.3.min.js")}}" type="text/javascript"></script>
-    <script src="{{path}}{{static_url("js/jquery.min.js")}}" type="text/javascript"></script>
-    <script src="{{path}}{{static_url("js/jquery-ui.min.js")}}" type="text/javascript"></script>
-    <script src="{{path}}{{static_url("js/diva-utils.js")}}" type="text/javascript"></script>
-    <script src="{{path}}{{static_url("js/diva.js")}}" type="text/javascript"></script>
+    <link rel="stylesheet/less" type="text/css" href="{{app_root}}{{static_url("css/style.less")}}" />
+    <link rel="stylesheet" href="{{app_root}}{{static_url("css/diva.css")}}" type="text/css" />
+    <link rel="stylesheet" href="{{app_root}}{{static_url("css/jquery-ui.css")}}" type="text/css" />
+    <script src="{{app_root}}{{static_url("js/less-1.1.3.min.js")}}" type="text/javascript"></script>
+    <script src="{{app_root}}{{static_url("js/jquery.min.js")}}" type="text/javascript"></script>
+    <script src="{{app_root}}{{static_url("js/jquery-ui.min.js")}}" type="text/javascript"></script>
+    <script src="{{app_root}}{{static_url("js/diva-utils.js")}}" type="text/javascript"></script>
+    <script src="{{app_root}}{{static_url("js/diva.js")}}" type="text/javascript"></script>
     <script type="text/javascript">
         $(document).ready(function() {
             $('#middle-pane').diva({
+                appRoot: '{{app_root}}',
                 tileFadeSpeed: 100,
                 fixedHeightGrid: false,
                 enableAutoTitle: false,
                 enableFullscreen: false,
                 iipServerBaseUrl: '{{ iip_server }}',
-                backendServer: '/divaserve/?q=1'
+                backendServer: '{{app_root}}/divaserve/?q=1'
             });
             $("#infobox").dialog({
                 autoOpen: false,
@@ -42,6 +43,7 @@
         <div id="diva-toolbar">
             <div id="title">Salzinnes Antiphonal (CDN-Hsmu M2149.L4) <div id="info-icon"></div></div>
             <div id="right-side">
+              <div class="medium-button"><div id="link-input"><input type="text"></div><span>x</span></div>
                 <div class="button"><div id="link-icon"></div><span>Link</span></div>
             </div>
             <div id="left-side">
@@ -51,12 +53,13 @@
                 <form id="diva-goto-page">
                 <div class="medium-button"><div id="goto-page"><input placeholder="" /></div><span>Go to folio/page</span></div>
                 </form>
+                <div class="medium-button"><div id="select-feast"><select size="1" name="foo"><option>z</select></div><span>Go to feast</span></div>
             </div>
         </div>
         <div id="three-panes">
             <div id="left-pane">
                 <div id="search-box">
-                    <form><input type="text" name="search" /></form><div id="back-forward-icons"><div id="back-icon"></div><div id="forward-icon"></div></div><div id="clear-results"><img src="{{path}}{{ static_url('img/x.png') }}" /></div>
+                    <form><input type="text" name="search" /></form><div id="back-forward-icons"><div id="back-icon"></div><div id="forward-icon"></div></div><div id="clear-results"><img src="{{app_root}}{{ static_url('img/x.png') }}" /></div>
                 </div>
                 <div id="search-outer">
                     <div id="search-results"></div>
@@ -99,13 +102,13 @@
 
       <p style="margin-top:0.5em;">Analysis and development by Alastair Porter, Andrew Hankinson, Catherine Motuz, Remi Chiu, Saining Li, and Wendy Liu.</p>
  
-      <p style="margin-top:0.5em; width:100%; text-align:center;"><img src="{{path}}{{static_url("img/cantus.gif")}}" width="300"><br>
+      <p style="margin-top:0.5em; width:100%; text-align:center;"><img src="{{app_root}}{{static_url("img/cantus.gif")}}" width="300"><br>
       <table style="border-spacing:1em;"><tr>
-          <td><img style="margin-top:0.3em;" src="{{path}}{{static_url("img/sshrc-logo.jpg")}}" width="350"></td>
-          <td><img style="margin-top:0.3em;" src="{{path}}{{static_url("img/schulich-logo.png")}}" width="350"></td>
+          <td><img style="margin-top:0.3em;" src="{{app_root}}{{static_url("img/sshrc-logo.jpg")}}" width="350"></td>
+          <td><img style="margin-top:0.3em;" src="{{app_root}}{{static_url("img/schulich-logo.png")}}" width="350"></td>
         </tr><tr>
-          <td><img style="margin-top:0.3em;" src="{{path}}{{static_url("img/cirmmt_logo.jpg")}}" width="350"></td>
-          <td><img style="margin-top:0.3em;" src="{{path}}{{static_url("img/ddmal400.jpg")}}" width="350"></td>
+          <td><img style="margin-top:0.3em;" src="{{app_root}}{{static_url("img/cirmmt_logo.jpg")}}" width="350"></td>
+          <td><img style="margin-top:0.3em;" src="{{app_root}}{{static_url("img/ddmal400.jpg")}}" width="350"></td>
       </tr></table>
     </div>
 </body>

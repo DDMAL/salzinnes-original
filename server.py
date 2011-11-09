@@ -75,8 +75,8 @@ class PageHandler(tornado.web.RequestHandler):
 
 class RootHandler(tornado.web.RequestHandler):
     def get(self):
-        path = self.request.path.rstrip("/")
-        self.render("templates/index.html", iip_server=conf.IIP_SERVER, path=path)
+        app_root = conf.APP_ROOT.rstrip("/")
+        self.render("templates/index.html", app_root=app_root, iip_server=conf.IIP_SERVER)
 
 class DivaHandler(tornado.web.RequestHandler):
     def get(self):
@@ -98,12 +98,16 @@ settings = {
     "cookie_secret": "mysecret"
 }
 
+def abs_path(relpath):
+    root = conf.APP_ROOT.rstrip("/")
+    return r"%s%s" % (root, relpath)
+
 application = tornado.web.Application([
-    (r"/", RootHandler),
-    (r"/divaserve/?", DivaHandler),
-    (r"/search", SearchHandler),
-    (r"/page/(.*)", PageHandler),
-    (r"/feasts", FeastHandler),
+    (abs_path(r"/?"), RootHandler),
+    (abs_path(r"/divaserve/?"), DivaHandler),
+    (abs_path(r"/search"), SearchHandler),
+    (abs_path(r"/page/(.*)"), PageHandler),
+    (abs_path(r"/feasts"), FeastHandler),
     ], **settings)
 
 def main(port):
