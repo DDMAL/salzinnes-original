@@ -1321,10 +1321,10 @@ THE SOFTWARE.
                 var feastNameEng = ("feastnameeng" in data[i].hl) ? data[i].hl.feastnameeng[0] : data[i].feastnameeng;
                 var office = ("office" in data[i].hl) ? data[i].hl.office[0] : data[i].office;
                 var genre = ("genre" in data[i].hl) ? data[i].hl.genre[0] : data[i].genre;
-                var desc = " (" + genre + " at " + office + ", " + feastNameEng + ")";
+                var desc = " (" + genre + ", " + office + ", " + feastNameEng + ")";
 
                 if ("feastname" in data[i].hl) {
-                    standardText = data[i].incipit + " (" + genre + " at " + office + ", " + feastName + ")";
+                    standardText = data[i].incipit + " (" + genre + ", " + office + ", " + feastName + ")";
                 } else if ("feastnameeng" in data[i].hl) {
                     standardText = data[i].incipit + desc;
                 } else if ("fullstandardtext" in data[i].hl) {
