@@ -93,8 +93,8 @@ class DivaHandler(tornado.web.RequestHandler):
 
 class FeastHandler(tornado.web.RequestHandler):
     def get(self):
-        response = solr_h.query("*:*", score=False, rows=0, facet="true", facet_field="feastname_strm")
-        fields = response.facet_counts.get("facet_fields", {}).get("feastname_strm", {})
+        response = solr_h.query("*:*", score=False, rows=0, facet="true", facet_field="feastnameeng_s")
+        fields = response.facet_counts.get("facet_fields", {}).get("feastnameeng_s", {})
         self.set_header("Content-Type", "application/json")
         self.write(json.dumps(fields))
 
