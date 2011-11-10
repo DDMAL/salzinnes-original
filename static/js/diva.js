@@ -357,9 +357,9 @@ THE SOFTWARE.
                         toAppend += (settings.openIncipits.indexOf(incipitID) >= 0) ? ' style="display: block;" ' : '';
                         toAppend += '>';
                         incipit_data = {
-                            'Mode': incipit.mode_strm,
-                            'Office': incipit.office_strm,
-                            'Genre': incipit.genre_strm,
+                            'Mode': incipit.mode,
+                            'Office': incipit.office,
+                            'Genre': incipit.genre,
                             'Liturgical Position': incipit.position_stored,
                             'Standard Text': incipit.fullstandardtext,
                             'Manuscript Text': incipit.fullmanuscripttext,
@@ -1317,14 +1317,24 @@ THE SOFTWARE.
             var numItems = data.length;
             for (var i = 0; i < numItems; i++) {
                 var standardText = "";
+                var feastName = ("feastname" in data[i].hl) ? data[i].hl.feastname[0] : data[i].feastname;
+                var feastNameEng = ("feastnameeng" in data[i].hl) ? data[i].hl.feastnameeng[0] : data[i].feastnameeng;
+                var office = ("office" in data[i].hl) ? data[i].hl.office[0] : data[i].office;
+                var genre = ("genre" in data[i].hl) ? data[i].hl.genre[0] : data[i].genre;
+                var desc = " (" + genre + " at " + office + ", " + feastNameEng + ")";
+
                 if ("feastname" in data[i].hl) {
-                    standardText = data[i].incipit + " (" + data[i].hl.feastname[0] + ")";
+                    standardText = data[i].incipit + " (" + genre + " at " + office + ", " + feastName + ")";
                 } else if ("feastnameeng" in data[i].hl) {
-                    standardText = data[i].incipit + " (" + data[i].hl.feastnameeng[0] + ")";
+                    standardText = data[i].incipit + desc;
                 } else if ("fullstandardtext" in data[i].hl) {
-                    standardText = data[i].hl.fullstandardtext[0];
+                    standardText = data[i].hl.fullstandardtext[0] + " (" /*+ data[i].office + ", " */ + feastNameEng + ")";
                 } else if ("fullmanuscripttext" in data[i].hl) {
-                    standardText = data[i].hl.fullmanuscripttext[0];
+                    standardText = data[i].hl.fullmanuscripttext[0]+ " ("/* + data[i].office + ", "*/ + feastNameEng + ")";
+                } else if ("caonumber" in data[i].hl) {
+                    standardText = data[i].incipit + " (" + data[i].hl.caonumber[0] + ")";
+                } else if ("office" in data[i].hl || "genre" in data[i].hl || "mode" in data[i].hl) {
+                    standardText = data[i].incipit + desc;
                 } else {
                     standardText = data[i].incipit;
                 }

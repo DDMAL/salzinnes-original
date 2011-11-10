@@ -24,17 +24,20 @@ class SearchHandler(tornado.web.RequestHandler):
     def get(self):
         q = self.get_argument("q")
         q = q.lower()
-        qstr = "fullmanuscripttext_t:*%s* OR fullstandardtext_t:*%s* OR feastname_t:*%s* OR feastnameeng_t:*%s*" % (q, q, q, q)
 
+        if q.startswith("cao") or q.startswith("can") or q.startswith("slz"):
+            q = "caonumber_t:%s" % q
         rows = self.get_argument("rows", "10")
         start = self.get_argument("start", "0")
         start = int(start)
+        hl="fullmanuscripttext_t,fullstandardtext_t,feastnameeng_t,feastname_t,office_t,mode_t,genre_t,caonumber_t"
+        qf = hl.replace(",", " ")
         if rows == "all":
-            response = solr_h.query(qstr, fields=(), rows=0)
+            response = solr_h.query(q, qf=qf, fields=(), rows=0)
             rows = response.numFound
         else:
             rows = int(rows)
-        response = solr_h.query(qstr, score=False, highlight="*", start=start, rows=rows)
+        response = solr_h.query(q, qf=qf, score=False, highlight=hl, start=start, rows=rows, sort="folio_t asc,sequence_t asc")
         numFound = response.numFound
         pages = []
         for d in response:
@@ -46,7 +49,7 @@ class SearchHandler(tornado.web.RequestHandler):
             for k,v in hl.iteritems():
                 p["hl"][k.replace("_t", "")] = v
             pages.append(p)
-        pages.sort(key=lambda d: (d["folio"], d["sequence"]))
+        pages.sort(key=lambda d: (d["folio"], int(d["sequence"])))
         self.set_header("Content-Type", "application/json")
         ret = {"numFound": numFound, "results": pages}
         self.write(json.dumps(ret))

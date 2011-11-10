@@ -311,7 +311,7 @@
    <dynamicField name="*_txt" type="text_general" indexed="true" stored="true" multiValued="true"/>
    <dynamicField name="*_strm" type="string" indexed="true" stored="true" multiValued="true"/>
    <dynamicField name="*_stored" type="string" indexed="false" stored="true" />
-   <copyField source="feastname_t" dest="feastname_strm" />
+   <copyField source="feastnameeng_t" dest="feastnameeng_s" />
  </fields>
 
  <!-- Field to use to determine and enforce document uniqueness. 
@@ -320,7 +320,7 @@
  <uniqueKey>id</uniqueKey>
 
  <!-- SolrQueryParser configuration: defaultOperator="AND|OR" -->
- <solrQueryParser defaultOperator="OR"/>
+ <solrQueryParser defaultOperator="AND"/>
 
  <defaultSearchField>id</defaultSearchField>
 
