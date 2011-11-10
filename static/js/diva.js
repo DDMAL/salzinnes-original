@@ -1591,6 +1591,11 @@ THE SOFTWARE.
                     adjustPages(1);
                 }, 10);
             });
+            $("#select-feast select").change(function(data) {
+                var folio = $(data.target).val();
+                var desiredPage = getPageIndex(folioToTiff(folio)) + 1;
+                gotoPage(desiredPage);
+            });
         };
 
         // Create a fullscreen statusbar thing - if it doesn't exist

@@ -52,9 +52,9 @@
                 <form id="diva-goto-page">
                 <div class="medium-button"><div id="goto-page"><input placeholder="" /></div><span>Go to folio/page</span></div>
                 </form>
-                <div class="medium-button"><div id="select-feast"><select size="1" name="foo">
+                <div class="medium-button"><div id="select-feast"><select size="1" name="feast">
                       {% for f in feasts %}
-                      <option>{{ escape(f[0]) }}</option>
+                      <option value="{{escape(f[1])}}">{{ escape(f[0]) }} ({{escape(f[1])}})</option>
                       {% end %}
                     </select>
                 </div><span>Go to feast</span></div>
