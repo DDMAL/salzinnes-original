@@ -11,6 +11,7 @@ from operator import itemgetter
 
 import divaserve
 import conf
+import feasts
 
 solr_h = solr.SolrConnection(conf.SOLR_URL)
 diva_s = divaserve.DivaServe(conf.IMAGE_DIRECTORY)
@@ -82,7 +83,7 @@ class PageHandler(tornado.web.RequestHandler):
 class RootHandler(tornado.web.RequestHandler):
     def get(self):
         app_root = conf.APP_ROOT.rstrip("/")
-        self.render("templates/index.html", app_root=app_root, iip_server=conf.IIP_SERVER)
+        self.render("templates/index.html", app_root=app_root, iip_server=conf.IIP_SERVER, feasts=feasts.feasts)
 
 class DivaHandler(tornado.web.RequestHandler):
     def get(self):
