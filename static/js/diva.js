@@ -365,7 +365,7 @@ THE SOFTWARE.
                                 'Mode': incipit.mode,
                                 'Office': incipit.office,
                                 'Genre': incipit.genre,
-                                'Liturgical Position': incipit.position_stored,
+                                'Liturgical Position': incipit.position,
                                 'Standard Text': incipit.fullstandardtext,
                                 'Manuscript Text': incipit.fullmanuscripttext,
                                 'Feast Name': incipit.feastname + ' (<em>' + incipit.feastnameeng + '</em>)',
@@ -1338,6 +1338,7 @@ THE SOFTWARE.
                 var feastNameEng = ("feastnameeng" in data[i].hl) ? data[i].hl.feastnameeng[0] : data[i].feastnameeng;
                 var office = ("office" in data[i].hl) ? data[i].hl.office[0] : data[i].office;
                 var genre = ("genre" in data[i].hl) ? data[i].hl.genre[0] : data[i].genre;
+                var position = ("position" in data[i].hl) ? data[i].hl.position[0] : data[i].position;
                 var desc = " (" + genre + ", " + office + ", " + feastNameEng + ")";
 
                 if ("feastname" in data[i].hl) {
@@ -1350,6 +1351,8 @@ THE SOFTWARE.
                     standardText = data[i].hl.fullmanuscripttext[0]+ " ("/* + data[i].office + ", "*/ + feastNameEng + ")";
                 } else if ("caonumber" in data[i].hl) {
                     standardText = data[i].incipit + " (" + data[i].hl.caonumber[0] + ")";
+                } else if ("position" in data[i].hl) {
+                    standardText = data[i].incipit + " (" + position + ", " + office + ", " + feastNameEng + ")";
                 } else if ("office" in data[i].hl || "genre" in data[i].hl || "mode" in data[i].hl) {
                     standardText = data[i].incipit + desc;
                 } else {

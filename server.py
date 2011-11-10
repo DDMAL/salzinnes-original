@@ -31,7 +31,7 @@ class SearchHandler(tornado.web.RequestHandler):
         rows = self.get_argument("rows", "10")
         start = self.get_argument("start", "0")
         start = int(start)
-        hl="fullmanuscripttext_t,fullstandardtext_t,feastnameeng_t,feastname_t,office_t,mode_t,genre_t,caonumber_t"
+        hl="fullmanuscripttext_t,fullstandardtext_t,feastnameeng_t,feastname_t,office_t,mode_t,genre_t,caonumber_t,position_t"
         qf = hl.replace(",", " ")
         if rows == "all":
             response = solr_h.query(q, qf=qf, fields=(), rows=0)
