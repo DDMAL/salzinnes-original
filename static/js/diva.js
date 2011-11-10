@@ -1357,7 +1357,7 @@ THE SOFTWARE.
                 }
                 var folio = data[i].folio;
                 tifName = folioToTiff(folio);
-                var backgroundImage = settings.iipServerBaseUrl + tifName + '&WID=35&CVT=JPG';
+                var backgroundImage = settings.iipServerBaseUrl + tifName + '&WID=40&CVT=JPG';
                 toAppend += '<div class="result" style="background-image: url(' + backgroundImage + ');" data-folio="' + folio + '" data-incipit="' + data[i].id + '">' + folio + ': ' + standardText + '</div>';
             }
             return toAppend;
