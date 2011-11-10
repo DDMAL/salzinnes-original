@@ -76,7 +76,7 @@ class PageHandler(tornado.web.RequestHandler):
             for k,v in hl.iteritems():
                 p["hl"][k.replace("_t", "")] = v
             pages.append(p)
-        pages.sort(key=lambda d: int(d["sequence"]))
+        pages.sort(key=lambda d: 0 if d["sequence"] =="" else int(d["sequence"]))
         self.set_header("Content-Type", "application/json")
         self.write(json.dumps(pages))
 
