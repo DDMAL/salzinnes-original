@@ -1268,16 +1268,19 @@ THE SOFTWARE.
             settings.desiredYOffset = getYOffset();
             settings.inGrid = true;
             // Hide the left and right panels
-            $('#left-pane').hide().width(0);
-            $('#right-pane').hide().width(0);
+            $('#search-pane').hide();
+            $('#context-pane').hide();
+            // Make the document panel take up the whole page
+            $('#document-pane').css('left', '0px').css('right', '0px');
             resizePanels();
             loadGrid();
         };
 
         var leaveGrid = function(preventLoad) {
             // Bring the left and right panels back
-            $('#left-pane').width(295).show(); // doesn't need inline-block for some reason
-            $('#right-pane').width(295).css('display', 'inline-block'); // needs inline-block to show up
+            $('#document-pane').css('left', $('#search-pane').width() + 1).css('right', $('#context-pane').width() + 1);
+            $('#search-pane').show(); // doesn't need inline-block for some reason
+            $('#context-pane').show(); // needs inline-block to show up
             resizePanels();
             // Save the grid top offset
             settings.gridScrollTop = $(settings.outerSelector).scrollTop();
