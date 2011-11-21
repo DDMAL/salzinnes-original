@@ -48,6 +48,12 @@
                 <li class="large-button"><div id="slider"></div><span>Control zoom</span></li>
                 <li class="double-button"><div id="previous-icon"></div><div id="next-icon"></div><span>Previous/Next</span></li>
                 <li class="medium-button"><div id="goto-page"><input placeholder="" /></div><span>Go to folio/page</span></li>
+                <li class="huge-button"><div id="select-feast"><select size="1" name="feast">
+                      {% for f in feasts %}
+                      <option value="{{escape(f[1])}}">{{ escape(f[0]) }} ({{escape(f[1])}})</option>
+                      {% end %}
+                    </select>
+                </div><span>Go to feast</span></li>
             </ul>
             </form>
             <ul id="right-buttons">
