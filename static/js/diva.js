@@ -1741,10 +1741,10 @@ THE SOFTWARE.
                 gotoPage(settings.currentPageIndex+2);
             });
             $('#link-icon').click(function() {
-                $('body').prepend('<div id="link-popup"><input id="link-popup-input" type="text" value="'+ getCurrentURL() + '"/></div>');
+                $('#wrap').prepend('<div id="link-popup"><input id="link-popup-input" type="text" value="'+ getCurrentURL() + '"/></div>');
 
                 // Catch onmouseup events outside of this div
-                $('body').mouseup(function(event) {
+                $('#wrap').mouseup(function(event) {
                     var targetID = event.target.id;
                     if (targetID == 'link-popup' || targetID == 'link-popup-input') {
                         $('#link-popup-input').select();
