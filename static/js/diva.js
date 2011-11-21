@@ -1739,16 +1739,15 @@ THE SOFTWARE.
                 gotoPage(settings.currentPageIndex+2);
             });
             $('#link-icon').click(function() {
-                var leftOffset = $(settings.outerSelector).offset().left + settings.panelWidth;
-                $('body').prepend('<div id="' + settings.ID + 'link-popup"><input id="' + settings.ID + 'link-popup-input" class="diva-input" type="text" value="'+ getCurrentURL() + '"/></div>');
-                $(settings.selector + 'link-popup').css('top', $(settings.outerSelector).offset().top + 'px').css('left', (leftOffset - 100) + 'px');
+                $('body').prepend('<div id="link-popup"><input id="link-popup-input" type="text" value="'+ getCurrentURL() + '"/></div>');
 
                 // Catch onmouseup events outside of this div
                 $('body').mouseup(function(event) {
                     var targetID = event.target.id;
-                    if (targetID == settings.ID + 'link-popup' || targetID == settings.ID + 'link-popup-input') {
+                    if (targetID == 'link-popup' || targetID == 'link-popup-input') {
+                        $('#link-popup-input').select();
                     } else {
-                        $(settings.selector + 'link-popup').remove();
+                        $('#link-popup').remove();
                     }
                 });
                 // Also delete it upon scroll and page up/down key events
