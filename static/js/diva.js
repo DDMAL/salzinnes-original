@@ -1374,6 +1374,8 @@ THE SOFTWARE.
             // Handle the search form submission
             $('#search-box form').submit(function() {
                 var query = $('#search-box input').val();
+                // Save it ...
+                settings.query = query;
                 var ajaxURL = settings.appRoot + '/search?q=' + query;
                 $('#search-results').text(''); // clear the pane first
                 $.getJSON(ajaxURL + '&rows=20', function(data) {
@@ -1801,7 +1803,7 @@ THE SOFTWARE.
 
         var getState = function() {
             var state = {
-                'f': settings.inFullscreen,
+                //'f': settings.inFullscreen,
                 'g': settings.inGrid,
                 'z': settings.zoomLevel,
                 'n': settings.pagesPerRow,
@@ -1809,8 +1811,9 @@ THE SOFTWARE.
                 'y': (settings.inGrid) ? settings.documentLeftScroll : getYOffset(),
                 'x': (settings.inGrid) ? settings.documentLeftScroll : getXOffset(),
                 'gy': (settings.inGrid) ? $(settings.outerSelector).scrollTop() : settings.gridScrollTop,
-                'h': settings.panelHeight,
-                'w': settings.panelWidth + settings.scrollbarWidth // add it on so it looks like a nice round number
+                'q': settings.query,
+                //'h': settings.panelHeight,
+                //'w': settings.panelWidth + settings.scrollbarWidth // add it on so it looks like a nice round number
             }
 
             return state;
@@ -1987,6 +1990,13 @@ THE SOFTWARE.
             }
         
             handleEvents();
+
+            // Set the search results
+            var queryParam = $.getHashParam('q');
+            if (queryParam) {
+                $('#search-box input').val(queryParam);
+                $('#search-box form').submit();
+            }
         };
 
         // Call the init function when this object is created.
