@@ -69,7 +69,7 @@ class DivaServe(object):
         elif zoom < 0:
             zoom = 0
 
-        mx_h = mx_w = t_wid = t_hei = num_pages = max_ratio = 0
+        mx_h = mx_w = t_wid = t_hei = num_pages = max_ratio = min_ratio = 0
         pgs = []
 
         for v in self.images.itervalues():
@@ -98,6 +98,7 @@ class DivaServe(object):
             
             ratio = h / float(w)
             max_ratio = ratio if ratio > max_ratio else max_ratio
+            min_ratio = ratio if (ratio < min_ratio or min_ratio == 0) else min_ratio
             t_wid += w
             t_hei += h
             num_pages += 1
@@ -113,6 +114,7 @@ class DivaServe(object):
                 'max_w': mx_w,
                 'max_h': mx_h,
                 'max_ratio': max_ratio,
+                'min_ratio': min_ratio,
                 't_hei': t_hei,
                 't_wid': t_wid
             }
