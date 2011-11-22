@@ -1268,16 +1268,19 @@ THE SOFTWARE.
             settings.desiredYOffset = getYOffset();
             settings.inGrid = true;
             // Hide the left and right panels
-            $('#left-pane').hide().width(0);
-            $('#right-pane').hide().width(0);
+            $('#search-pane').hide();
+            $('#context-pane').hide();
+            // Make the document panel take up the whole page
+            $('#document-pane').css('left', '0px').css('right', '0px');
             resizePanels();
             loadGrid();
         };
 
         var leaveGrid = function(preventLoad) {
             // Bring the left and right panels back
-            $('#left-pane').width(295).show(); // doesn't need inline-block for some reason
-            $('#right-pane').width(295).css('display', 'inline-block'); // needs inline-block to show up
+            $('#document-pane').css('left', $('#search-pane').width() + 1).css('right', $('#context-pane').width() + 1);
+            $('#search-pane').show(); // doesn't need inline-block for some reason
+            $('#context-pane').show(); // needs inline-block to show up
             resizePanels();
             // Save the grid top offset
             settings.gridScrollTop = $(settings.outerSelector).scrollTop();
@@ -1371,6 +1374,8 @@ THE SOFTWARE.
             // Handle the search form submission
             $('#search-box form').submit(function() {
                 var query = $('#search-box input').val();
+                // Save it ...
+                settings.query = query;
                 var ajaxURL = settings.appRoot + '/search?q=' + query;
                 $('#search-results').text(''); // clear the pane first
                 $.getJSON(ajaxURL + '&rows=20', function(data) {
@@ -1736,16 +1741,15 @@ THE SOFTWARE.
                 gotoPage(settings.currentPageIndex+2);
             });
             $('#link-icon').click(function() {
-                var leftOffset = $(settings.outerSelector).offset().left + settings.panelWidth;
-                $('body').prepend('<div id="' + settings.ID + 'link-popup"><input id="' + settings.ID + 'link-popup-input" class="diva-input" type="text" value="'+ getCurrentURL() + '"/></div>');
-                $(settings.selector + 'link-popup').css('top', $(settings.outerSelector).offset().top + 'px').css('left', (leftOffset - 100) + 'px');
+                $('#wrap').prepend('<div id="link-popup"><input id="link-popup-input" type="text" value="'+ getCurrentURL() + '"/></div>');
 
                 // Catch onmouseup events outside of this div
-                $('body').mouseup(function(event) {
+                $('#wrap').mouseup(function(event) {
                     var targetID = event.target.id;
-                    if (targetID == settings.ID + 'link-popup' || targetID == settings.ID + 'link-popup-input') {
+                    if (targetID == 'link-popup' || targetID == 'link-popup-input') {
+                        $('#link-popup-input').select();
                     } else {
-                        $(settings.selector + 'link-popup').remove();
+                        $('#link-popup').remove();
                     }
                 });
                 // Also delete it upon scroll and page up/down key events
@@ -1799,7 +1803,7 @@ THE SOFTWARE.
 
         var getState = function() {
             var state = {
-                'f': settings.inFullscreen,
+                //'f': settings.inFullscreen,
                 'g': settings.inGrid,
                 'z': settings.zoomLevel,
                 'n': settings.pagesPerRow,
@@ -1807,8 +1811,9 @@ THE SOFTWARE.
                 'y': (settings.inGrid) ? settings.documentLeftScroll : getYOffset(),
                 'x': (settings.inGrid) ? settings.documentLeftScroll : getXOffset(),
                 'gy': (settings.inGrid) ? $(settings.outerSelector).scrollTop() : settings.gridScrollTop,
-                'h': settings.panelHeight,
-                'w': settings.panelWidth + settings.scrollbarWidth // add it on so it looks like a nice round number
+                'q': settings.query,
+                //'h': settings.panelHeight,
+                //'w': settings.panelWidth + settings.scrollbarWidth // add it on so it looks like a nice round number
             }
 
             return state;
@@ -1985,6 +1990,13 @@ THE SOFTWARE.
             }
         
             handleEvents();
+
+            // Set the search results
+            var queryParam = $.getHashParam('q');
+            if (queryParam) {
+                $('#search-box input').val(queryParam);
+                $('#search-box form').submit();
+            }
         };
 
         // Call the init function when this object is created.
