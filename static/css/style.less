@@ -185,10 +185,9 @@ input:focus {
 }
 
 #back-forward-icons {
-    .inline-block;
-    position: relative;
+    position: absolute;
     top: 6px;
-    left: 10px;
+    right: 10px;
     div {
         .inline-block;
         height: 25px;
@@ -240,7 +239,7 @@ input:focus {
     height: 30px;
     .border-radius(10px);
     border: 1px solid @medium-grey;
-    width: @left-width - 75px;
+    width: @left-width - 75 - 43;
     margin-left: 5px;
     padding-right: 25px;
     color: @dark-grey;
