@@ -1386,7 +1386,7 @@ THE SOFTWARE.
                     // Filler box to pad the length of the box so that it doesn't change after query #2
                     var fillerBox = '';
                     if (data.numFound > 20) {
-                        var fillerHeight = (data.numFound - 20) * 61; // the height of the box
+                        var fillerHeight = (data.numFound - 20) * 81; // the height of the box
                         fillerBox += '<div id="search-filler" style="width: 100%; height: ' + fillerHeight + 'px"><p class="result-info">Loading more results ...</p></div>';
                     }
 
