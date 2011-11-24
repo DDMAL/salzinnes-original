@@ -369,7 +369,7 @@ THE SOFTWARE.
                                 'Standard Text': incipit.fullstandardtext,
                                 'Manuscript Text': incipit.fullmanuscripttext,
                                 'Feast Name': incipit.feastname + ' (<em>' + incipit.feastnameeng + '</em>)',
-                                'CAO Number': incipit.caonumber,
+                                'CAO Number': incipit.caonumber
                             }
                             for (li_item in incipit_data) {
                                 toAppend += '<li><strong>' + li_item + ':</strong> ' + incipit_data[li_item] + '</li>';
@@ -1812,8 +1812,7 @@ THE SOFTWARE.
                 'x': (settings.inGrid) ? settings.documentLeftScroll : getXOffset(),
                 'gy': (settings.inGrid) ? $(settings.outerSelector).scrollTop() : settings.gridScrollTop,
                 'q': settings.query,
-                //'h': settings.panelHeight,
-                //'w': settings.panelWidth + settings.scrollbarWidth // add it on so it looks like a nice round number
+                'r': settings.resultNumber // 1-indexed
             }
 
             return state;
