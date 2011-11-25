@@ -42,6 +42,7 @@ THE SOFTWARE.
             iipServerBaseUrl: '',       // The URL to the IIPImage installation, including the ?FIF=
             maxPagesPerRow: 8,          // Maximum number of pages per row, grid view
             maxZoomLevel: 0,            // Optional; defaults to the max zoom returned in the JSON response
+            minInnerWidth: 0,          // lol
             minPagesPerRow: 2,          // 2 for the spread view. Recommended to leave it
             minZoomLevel: 0,            // Defaults to 0 (the minimum zoom)
             onFullscreen: null,         // Callback for toggling fullscreen
@@ -950,8 +951,9 @@ THE SOFTWARE.
                     
                 // Set the height and width of documentpane (necessary for dragscrollable)
                 $(settings.innerSelector).css('height', Math.round(settings.totalHeight));
-                var widthToSet = (data.dims.max_w + settings.horizontalPadding * 2 < settings.panelWidth ) ? settings.panelWidth : data.dims.max_w + settings.horizontalPadding * 2; // width of page + 40 pixels on each side if necessary
-                $(settings.innerSelector).css('width', Math.round(widthToSet));
+                settings.minInnerWidth = data.dims.max_w + settings.horizontalPadding * 2;
+                var widthToSet = (settings.minInnerWidth < settings.panelWidth ) ? settings.panelWidth : settings.minInnerWidth;
+                $(settings.innerSelector).width(widthToSet);
 
                 // Scroll to the proper place
                 documentScroll();
@@ -1866,6 +1868,13 @@ THE SOFTWARE.
             // I'm not sure why you can't just ignore the scrollbar but you can't
             $(settings.outerSelector).height(settings.panelHeight + settings.scrollbarWidth);
             $(settings.outerSelector).width(settings.panelWidth + settings.scrollbarWidth);
+
+            // Check if we need to resize the inner element
+            var innerWidth = $(settings.innerSelector).width();
+            if (settings.panelWidth > innerWidth || (settings.panelWidth < innerWidth && settings.panelWidth > settings.minInnerWidth && settings.minInnerWidth > 0)) {
+                // Compensate for border
+                $(settings.innerSelector).width(settings.panelWidth - 1);
+            }
 
             // Adjust the side panel heights
             $('#search-outer').height(settings.panelHeight - $('#search-box').height() + settings.scrollbarWidth);
