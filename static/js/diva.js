@@ -1883,6 +1883,7 @@ THE SOFTWARE.
             // Adjust the side panel heights
             $('#search-outer').height(settings.panelHeight - $('#search-box').height() + settings.scrollbarWidth);
             $('#info-outer').height(settings.panelHeight - 20 + settings.scrollbarWidth);
+            $('#info-outer div').width($('#info-outer').width() - settings.scrollbarWidth);
         }
 
         var init = function() {
