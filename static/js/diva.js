@@ -1263,6 +1263,9 @@ THE SOFTWARE.
         };
 
         var enterGrid = function() {
+            // Change the label of the slider
+            $('#slider-label').text('Pages per row');
+
             // Store the x and y offsets
             settings.desiredXOffset = getXOffset();
             settings.desiredYOffset = getYOffset();
@@ -1277,6 +1280,9 @@ THE SOFTWARE.
         };
 
         var leaveGrid = function(preventLoad) {
+            // Change the label of the slider back
+            $('#slider-label').text('Control zoom');
+
             // Bring the left and right panels back
             $('#document-pane').css('left', $('#search-pane').width() + 1).css('right', $('#context-pane').width() + 1);
             $('#search-pane').show(); // doesn't need inline-block for some reason
