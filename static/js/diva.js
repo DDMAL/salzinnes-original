@@ -762,7 +762,7 @@ THE SOFTWARE.
         var setupInitialLoad = function(data, zoomLevel) {
             settings.itemTitle = data.item_title;
             settings.numPages = data.pgs.length;
-            $('#diva-goto-page input').attr('placeholder', settings.numPages);
+            $('#diva-goto-page input').attr('placeholder', ' ' + settings.numPages);
 
             // Make sure the set max zoom level is valid
             settings.maxZoomLevel = (settings.maxZoomLevel > 0 && settings.maxZoomLevel <= data.max_zoom) ? settings.maxZoomLevel : data.max_zoom;

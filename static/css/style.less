@@ -94,14 +94,19 @@ body {
             width: 100px;
             #goto-page {
                 input {
-                    line-height: 25px;
+                    // Hacks to make it look the same in FF, Chrome and Safari
+                    // (Because Safari handles padding of placeholders oddly)
+                    position: relative;
+                    top: -2px;
+                    line-height: 15px;
                     .border-radius(4px);
                     border: 1px solid @medium-grey;
-                    width: 50px;
-                    height: 25px;
+                    width: 43px;
+                    height: 20px;
                     font-size: 14px;
                     color: @dark-grey;
-                    text-align: center;
+                    padding-top: 3px;
+                    padding-left: 5px;
                 }
                 margin-bottom: 3px;
             }
