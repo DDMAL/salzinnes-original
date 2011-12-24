@@ -76,6 +76,8 @@ THE SOFTWARE.
             centerY: 0,                 // Y-coordinate, see above
             ctrlKey: false,             // Hack for ctrl+double-clicking in Firefox on Mac
             currentPageIndex: 0,        // The current page in the viewport (center-most page)
+            currentResult: 0,           // 1-indexed, holds the highlighted search result
+            desiredResult: 0,           // Used for holding the result number hash param in search
             desiredXOffset: 0,          // Used for holding the 'x' hash parameter (x offset from left side of page)
             desiredYOfffset: 0,         // Used for holding the 'y' hash parameter (y offset from top of page)
             dimAfterZoom: 0,            // Used for storing the item dimensions after zooming
@@ -108,12 +110,14 @@ THE SOFTWARE.
             panelHeight: 0,             // Height of the panel. Set in initiateViewer()
             panelWidth: 0,              // Width of the panel. Set in initiateViewer()
             prevVptTop: 0,              // Used to determine vertical scroll direction
+            resultNumber: 0,            // The number of the search result that has just been processed
+            resultPresent: false,       // Flag for checking if the desired result has been processed yet
             scaleWait: false,           // For preventing double-scale on the iPad
-            selector: '',               // Uses the generated ID prefix to easily select elements
             scrollbarWidth: 0,          // Set to the actual scrollbar width in init()
             scrollLeft: -1,             // Total scroll from the left
             scrollSoFar: 0,             // Holds the number of pixels of vertical scroll
             scrollTop: -1,              // Total scroll from the top
+            selector: '',               // Uses the generated ID prefix to easily select elements
             totalHeight: 0,             // Height of all the image stacked together, value set later
             verticalOffset: 0,          // Used for storing the page offset before zooming
             verticalPadding: 0,         // Either the fixed padding or adaptive padding
@@ -1325,7 +1329,9 @@ THE SOFTWARE.
         };
 
         var highlightNextResult = function(currentResult) {
-            $('#search-results div').removeClass('active');
+            settings.currentResult = parseInt($(currentResult).attr('id').substring(7), 10);
+            console.log(settings.currentResult);
+            $('#search-results .result').removeClass('active');
             $(currentResult).addClass('active');
             var folio = $(currentResult).attr('data-folio');
             var incipitID = $(currentResult).attr('data-incipit');
@@ -1370,7 +1376,13 @@ THE SOFTWARE.
                 var folio = data[i].folio;
                 tifName = folioToTiff(folio);
                 var backgroundImage = settings.iipServerBaseUrl + tifName + '&WID=40&CVT=JPG';
-                toAppend += '<div class="result" style="background-image: url(' + backgroundImage + ');" data-folio="' + folio + '" data-incipit="' + data[i].id + '">' + folio + ': ' + standardText + '</div>';
+
+                // If the hash param for the result has been processed:
+                settings.resultNumber++;
+                if (settings.desiredResult > 0 && settings.resultNumber == settings.desiredResult) {
+                    settings.resultPresent = true;
+                }
+                toAppend += '<div id="result-' + settings.resultNumber + '"class="result" style="background-image: url(' + backgroundImage + ');" data-folio="' + folio + '" data-incipit="' + data[i].id + '">' + folio + ': ' + standardText + '</div>';
             }
             return toAppend;
         };
@@ -1393,24 +1405,40 @@ THE SOFTWARE.
                     var fillerBox = '';
                     if (data.numFound > 20) {
                         var fillerHeight = (data.numFound - 20) * 96; // the height of the box
-                        fillerBox += '<div id="search-filler" style="width: 100%; height: ' + fillerHeight + 'px"><p class="result-info">Loading more results ...</p></div>';
+                        fillerBox += '<div id="search-filler" style="width: 100%; height: ' + fillerHeight + 'px">';
                     }
 
                     var searchResults = data.results;
                     $('#search-results').html(resultInfo + getSearchResults(searchResults) + fillerBox);
                     $('#clear-results').show();
-                    $('#search-results div').click(function() {
-                        highlightNextResult(this);
-                    });
+                    var numResultsSoFar = 20;
                     // Send off another request to fetch more results
-                    $.getJSON(ajaxURL + '&start=20&rows=all', function(data) {
-                        if (data.results.length > 0) {
-                            $('#search-filler').replaceWith(getSearchResults(data.results));
+                    var fetchMoreResults = function(start) {
+                        if (numResultsSoFar < data.numFound) {
+                            $.getJSON(ajaxURL + '&start=' + start + '&rows=20', function(data) {
+                                if (data.results.length > 0) {
+                                    $('#search-filler').append(getSearchResults(data.results));
+                                    numResultsSoFar += 20;
+                                    fetchMoreResults(start + 20);
+                                }
+
+                                // The desired result has been processed, highlight it
+                                if (settings.resultPresent) {
+                                    // May be off-screen, so scroll to the right place
+                                    var yScroll = 26 + (settings.desiredResult - 1) * 96;
+                                    // Speed of scrolling should depend on the amount to scroll
+                                    $('#search-outer').animate({scrollTop: yScroll}, Math.log(yScroll) * 50);
+                                    highlightNextResult($('#result-' + settings.desiredResult));
+                                    settings.resultPresent = false;
+                                    settings.desiredResult = 0;
+                                }
+                                $('.result').click(function() {
+                                    highlightNextResult(this); // needs to be handled better
+                                });
+                            });
                         }
-                        $('#search-results div').click(function() {
-                            highlightNextResult(this); // needs to be handled better
-                        });
-                    });
+                    };
+                    fetchMoreResults(20);
                 });
                 return false;
             });
@@ -1419,6 +1447,10 @@ THE SOFTWARE.
             $('#clear-results').click(function() {
                 $(this).fadeOut(50);
                 $('#search-box input').val('');
+                settings.query = '';
+                settings.desiredResult = 0; // Just in case
+                settings.resultNumber = 0;
+                settings.currentResult = 0;
                 // Clear the search results pane too
                 $('#search-results').text('');
             });
@@ -1811,14 +1843,14 @@ THE SOFTWARE.
             var state = {
                 //'f': settings.inFullscreen,
                 'g': settings.inGrid,
-                'z': settings.zoomLevel,
+                'z': '' + settings.zoomLevel, // otherwise, no 0
                 'n': settings.pagesPerRow,
                 'i': settings.currentPageIndex, // page index, only used when not in grid
                 'y': (settings.inGrid) ? settings.documentLeftScroll : getYOffset(),
                 'x': (settings.inGrid) ? settings.documentLeftScroll : getXOffset(),
                 'gy': (settings.inGrid) ? $(settings.outerSelector).scrollTop() : settings.gridScrollTop,
                 'q': settings.query,
-                'r': settings.resultNumber // 1-indexed
+                'r': settings.currentResult, // 1-indexed
             }
 
             return state;
@@ -2007,8 +2039,14 @@ THE SOFTWARE.
             // Set the search results
             var queryParam = $.getHashParam('q');
             if (queryParam) {
+                // If there is a query and result number, store it
+                var resultNumber = parseInt($.getHashParam('r'), 10);
+                if (resultNumber > 0) {
+                    settings.desiredResult = resultNumber;
+                }
                 $('#search-box input').val(queryParam);
                 $('#search-box form').submit();
+
             }
         };
 
