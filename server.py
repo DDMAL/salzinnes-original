@@ -31,7 +31,7 @@ class SearchHandler(tornado.web.RequestHandler):
         rows = self.get_argument("rows", "10")
         start = self.get_argument("start", "0")
         start = int(start)
-        hl="fullmanuscripttext_t,fullstandardtext_t,feastnameeng_t,feastname_t,office_t,mode_t,genre_t,caonumber_t,position_t"
+        hl="fullmanuscripttext_t,fullstandardtext_t,feastnameeng_t,feastname_t,office_t,mode_t,genre_t,caonumber_t,position_t,illumination_t"
         qf = hl.replace(",", " ")
         if rows == "all":
             response = solr_h.query(q, qf=qf, fields=(), rows=0)
@@ -50,7 +50,13 @@ class SearchHandler(tornado.web.RequestHandler):
             for k,v in hl.iteritems():
                 p["hl"][k.replace("_t", "")] = v
             pages.append(p)
-        pages.sort(key=lambda d: (d["folio"], int(d["sequence"])))
+        def page_sort(pg):
+            if pg["sequence"]:
+                s = int(pg["sequence"])
+            else:
+                s = 0
+            return (pg["folio"], s)
+        pages.sort(key=page_sort)
         self.set_header("Content-Type", "application/json")
         ret = {"numFound": numFound, "results": pages}
         self.write(json.dumps(ret))

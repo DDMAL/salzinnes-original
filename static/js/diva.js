@@ -1373,6 +1373,8 @@ THE SOFTWARE.
                     standardText = data[i].incipit + " (" + position + ", " + office + ", " + feastNameEng + ")";
                 } else if ("office" in data[i].hl || "genre" in data[i].hl || "mode" in data[i].hl) {
                     standardText = data[i].incipit + desc;
+                } else if ("illumination" in data[i].hl) {
+                    standardText = data[i].hl.illumination;
                 } else {
                     standardText = data[i].incipit;
                 }
