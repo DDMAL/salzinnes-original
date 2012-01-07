@@ -38,7 +38,7 @@ class SearchHandler(tornado.web.RequestHandler):
             rows = response.numFound
         else:
             rows = int(rows)
-        response = solr_h.query(q, qf=qf, score=False, highlight=hl, start=start, rows=rows, sort="folio_t asc,sequence_t asc")
+        response = solr_h.query(q, qf=qf, score=False, highlight=hl, hl_fragsize=75, start=start, rows=rows, sort="folio_t asc,sequence_t asc")
         numFound = response.numFound
         pages = []
         for d in response:

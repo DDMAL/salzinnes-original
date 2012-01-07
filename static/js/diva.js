@@ -1351,6 +1351,9 @@ THE SOFTWARE.
                 var standardText = "";
                 var feastName = ("feastname" in data[i].hl) ? data[i].hl.feastname[0] : data[i].feastname;
                 var feastNameEng = ("feastnameeng" in data[i].hl) ? data[i].hl.feastnameeng[0] : data[i].feastnameeng;
+                if (feastNameEng.length > 40) {
+                    feastNameEng = feastNameEng.substring(0, 40) + "&hellip;";
+                }
                 var office = ("office" in data[i].hl) ? data[i].hl.office[0] : data[i].office;
                 var genre = ("genre" in data[i].hl) ? data[i].hl.genre[0] : data[i].genre;
                 var position = ("position" in data[i].hl) ? data[i].hl.position[0] : data[i].position;
@@ -1404,7 +1407,7 @@ THE SOFTWARE.
                     // Filler box to pad the length of the box so that it doesn't change after query #2
                     var fillerBox = '';
                     if (data.numFound > 20) {
-                        var fillerHeight = (data.numFound - 20) * 96; // the height of the box
+                        var fillerHeight = (data.numFound - 20) * 86; // the height of the box
                         fillerBox += '<div id="search-filler" style="width: 100%; height: ' + fillerHeight + 'px">';
                     }
 
