@@ -367,13 +367,16 @@ THE SOFTWARE.
                             toAppend += (settings.openIncipits.indexOf(incipitID) >= 0) ? ' style="display: block;" ' : '';
                             toAppend += '>';
                             incipit_data = {
-                                'Mode': incipit.mode,
-                                'Office': incipit.office,
-                                'Genre': incipit.genre,
-                                'Liturgical Position': incipit.position,
-                                'Standard Text': incipit.fullstandardtext,
-                                'Manuscript Text': incipit.fullmanuscripttext,
-                                'Feast Name': incipit.feastname + ' (<em>' + incipit.feastnameeng + '</em>)',
+                                'Mode': "mode" in incipit.hl ? incipit.hl.mode : incipit.mode,
+                                'Office': "office" in incipit.hl ? incipit.hl.office : incipit.office,
+                                'Genre': "genre" in incipit.hl ? incipit.hl.genre : incipit.genre,
+                                'Liturgical Position': "position" in incipit.hl ? incipit.hl.position : incipit.position,
+                                'Standard Text': "fullstandardtext" in incipit.hl ?
+                                    incipit.hl.fullstandardtext : incipit.fullstandardtext,
+                                'Manuscript Text': "fullmanuscripttext" in incipit.hl ?
+                                    incipit.hl.fullmanuscripttext :incipit.fullmanuscripttext,
+                                'Feast Name': "feastname" in incipit.hl ? incipit.hl.feastname :
+                                    incipit.feastname + ' (<em>' + incipit.feastnameeng + '</em>)',
                                 'CAO Number': incipit.caonumber
                             }
                             for (li_item in incipit_data) {

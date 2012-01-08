@@ -64,23 +64,28 @@ class SearchHandler(tornado.web.RequestHandler):
 class PageHandler(tornado.web.RequestHandler):
     def get(self, pgno):
         q = self.get_argument("q", None)
+        args = {}
+        query = "folio_t:%s" % pgno
         if q:
-            query = "folio_t:%s OR (folio_t:%s AND (fullmanuscripttext_t:%s OR fullstandardtext_t:%s))" % (pgno, pgno, q, q)
-        else:
-            query = "folio_t:%s" % pgno
-        response = solr_h.query(query, score=False, highlight="*", rows=20, sort="sequence_t asc")
+            args["hl"] = "true"
+            args["hl_fl"] = "*"
+            args["hl_q"] = q
+            args["hl_fragsize"] = "0"
+        response = solr_h.query(query, score=False, rows=20, sort="sequence_t asc", **args)
         # Do 1 query and hope we get them all. If not, do another one
         if response.numFound > 20:
-            response = solr_h.query(query, score=False, highlight="*", rows=response.numFound)
+            response = solr_h.query(query, score=False, rows=response.numFound, **args)
         pages = []
+
         for d in response:
             p = {}
             for k,v in d.iteritems():
                 p[k.replace("_t", "")] = v
-            hl=response.highlighting.get(p["id"], {})
-            p["hl"]={}
-            for k,v in hl.iteritems():
-                p["hl"][k.replace("_t", "")] = v
+            if hasattr(response, "highlighting"):
+                hl=response.highlighting.get(p["id"], {})
+                p["hl"]={}
+                for k,v in hl.iteritems():
+                    p["hl"][k.replace("_t", "")] = v
             pages.append(p)
         pages.sort(key=lambda d: 0 if d["sequence"] =="" else int(d["sequence"]))
         self.set_header("Content-Type", "application/json")
